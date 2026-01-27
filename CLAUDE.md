@@ -1,5 +1,29 @@
 # Homestead - Cloud Development Environment
 
+## 🔥 CRITICAL: YOU CONTROL THE SERVERS
+
+**STOP ASKING THE USER TO RUN COMMANDS. YOU CAN DO IT.**
+
+You have full access to:
+- Start/stop/restart the dev server (`npm run dev`)
+- Kill processes on ports (`lsof -ti :3005 | xargs kill -9`)
+- View logs (`tail -f /tmp/homestead-*.log`)
+- Run ANY bash command on the Mac
+- Test the application yourself
+
+**DO NOT** ask the user to:
+- Restart servers - YOU restart them
+- Check logs - YOU check them
+- Run commands - YOU run them
+- Test URLs - YOU can use tools to test
+
+**ONLY** ask the user to:
+- Actually use the UI on their phone/browser when YOU need to see the result
+- Provide their personal preferences or decisions
+- Give you access/credentials you don't have
+
+---
+
 ## Memory System
 
 **Every new agent should read these files FIRST:**
