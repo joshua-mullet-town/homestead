@@ -47,10 +47,37 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+// Validate ../../../app/mic-test/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/mic-test">> = Specific
+  const handler = {} as typeof import("../../../app/mic-test/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
   const handler = {} as typeof import("../../../app/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/preview/[sessionId]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/preview/[sessionId]">> = Specific
+  const handler = {} as typeof import("../../../app/preview/[sessionId]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/speech-test/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/speech-test">> = Specific
+  const handler = {} as typeof import("../../../app/speech-test/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

@@ -1,6 +1,40 @@
 # STATE.md - What We Know
 
-## [2026-01-27 15:00] Path B Complete: Voice Dictation + Mobile Polish
+## [2026-01-27 16:05] Voice Dictation Blocked by Chrome Security
+
+**Problem discovered**: Chrome blocks microphone/speech API on ALL non-localhost domains, including:
+- Cloudflare tunnel (even with valid HTTPS cert)
+- Self-signed HTTPS certificates
+- IP addresses (10.0.0.142)
+- `.local` domains
+
+**Even `http://localhost` failed** with `not-allowed` error, suggesting:
+- macOS system microphone permission not granted to Chrome, OR
+- Mac microphone disabled/not available, OR
+- Chrome global microphone setting blocking it
+
+**What we tried**:
+- HTTPS with self-signed cert (failed - cert not trusted)
+- Cloudflare tunnel with valid cert (failed - domain not whitelisted)
+- HTTP on localhost (failed - system permission issue?)
+- Web Speech API (same `not-allowed` error)
+- Manual Chrome microphone allow list (no effect)
+
+**Why holler-next works**: Uses `http://localhost:3002` and apparently has system mic permission
+
+**Decision**: **Defer voice to Phase 2** or post-deployment with real domain
+- Voice requires proper production deployment with real domain + SSL
+- Not solvable in local development with current Chrome security policies
+- Alternative: Use phone's native dictation and paste (Gboard voice typing)
+
+**Files created during investigation**:
+- `/app/mic-test/page.tsx` - MediaRecorder test page
+- `/app/speech-test/page.tsx` - Web Speech API test page
+- `/components/VoiceRecorder.tsx` - Native MediaRecorder implementation (blocked)
+
+---
+
+## [2026-01-27 15:00] Path B Partial: Terminal + Mobile Polish (No Voice)
 
 **What we built:**
 - Voice recording UI component at bottom of terminal page (VoiceRecorder.tsx)

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { io, Socket } from 'socket.io-client';
 import VoiceRecorder from '@/components/VoiceRecorder';
 import { ZoomIn, ZoomOut } from 'lucide-react';
@@ -59,14 +60,21 @@ export default function TerminalPage() {
           xtermRef.current = xterm;
         }
 
-        // Connect to Socket.IO - use current hostname and protocol
+        // Connect to Socket.IO - use current URL (for cloudflare tunnel) or local with port
+        const isCloudflare = typeof window !== 'undefined' && window.location.hostname.includes('trycloudflare.com');
         const protocol = typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'https' : 'http';
-        const socketUrl = typeof window !== 'undefined'
-          ? `${protocol}://${window.location.hostname}:3005`
-          : 'http://localhost:3005';
+
+        const socketUrl = isCloudflare
+          ? `${protocol}://${window.location.host}` // Use same host for cloudflare (no port)
+          : (typeof window !== 'undefined'
+              ? `${protocol}://${window.location.hostname}:3005` // Local with explicit port
+              : 'http://localhost:3005');
+
+        console.log('[Socket] Connecting to:', socketUrl);
 
         const socket = io(socketUrl, {
-          transports: ['websocket', 'polling']
+          transports: ['websocket', 'polling'],
+          path: '/socket.io' // Explicit path
         });
 
         socketRef.current = socket;
@@ -76,8 +84,8 @@ export default function TerminalPage() {
           setIsConnected(true);
           setError(null);
 
-          // Create terminal session
-          socket.emit('terminal:create', sessionId, '/Users/joshuamullet/code');
+          // Create terminal session (server will default to HOME directory)
+          socket.emit('terminal:create', sessionId);
         });
 
         socket.on('disconnect', () => {
@@ -193,8 +201,16 @@ export default function TerminalPage() {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {/* Font Size Controls */}
+        <div className="flex items-center gap-3">
+          {/* Preview button */}
+          <Link
+            href={`/preview/${sessionId}`}
+            className="px-3 py-1.5 bg-[#00FF66] text-black font-bold rounded hover:bg-[#FFCC00] transition-colors text-sm"
+          >
+            PREVIEW
+          </Link>
+
+          {/* Font size controls */}
           <button
             onClick={() => setFontSize(prev => Math.max(10, prev - 2))}
             className="p-2 rounded bg-gray-800 hover:bg-gray-700 text-white active:scale-95 transition-transform"

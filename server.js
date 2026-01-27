@@ -8,18 +8,15 @@ const pty = require('node-pty');
 const os = require('os');
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = '0.0.0.0';
+const hostname = 'localhost'; // localhost for microphone access
 const port = 3005;
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-// Check for SSL certificates
-const useHttps = existsSync('localhost-key.pem') && existsSync('localhost-cert.pem');
-const httpsOptions = useHttps ? {
-  key: readFileSync('localhost-key.pem'),
-  cert: readFileSync('localhost-cert.pem')
-} : null;
+// For development, use HTTP on localhost (Chrome trusts it for microphone)
+// For production, use HTTPS with proper domain
+const useHttps = false; // Disabled for development
 
 // Terminal manager
 class TerminalManager {
@@ -100,28 +97,17 @@ class TerminalManager {
 }
 
 app.prepare().then(() => {
-  // Create HTTP or HTTPS server based on certificate availability
-  const server = useHttps
-    ? createHttpsServer(httpsOptions, async (req, res) => {
-        try {
-          const parsedUrl = parse(req.url, true);
-          await handle(req, res, parsedUrl);
-        } catch (err) {
-          console.error('Error occurred handling', req.url, err);
-          res.statusCode = 500;
-          res.end('internal server error');
-        }
-      })
-    : createHttpServer(async (req, res) => {
-        try {
-          const parsedUrl = parse(req.url, true);
-          await handle(req, res, parsedUrl);
-        } catch (err) {
-          console.error('Error occurred handling', req.url, err);
-          res.statusCode = 500;
-          res.end('internal server error');
-        }
-      });
+  // Use HTTP for development (localhost is trusted by Chrome for microphone)
+  const server = createHttpServer(async (req, res) => {
+    try {
+      const parsedUrl = parse(req.url, true);
+      await handle(req, res, parsedUrl);
+    } catch (err) {
+      console.error('Error occurred handling', req.url, err);
+      res.statusCode = 500;
+      res.end('internal server error');
+    }
+  });
 
   const io = new Server(server, {
     cors: {
@@ -191,13 +177,8 @@ app.prepare().then(() => {
 
   server.listen(port, hostname, (err) => {
     if (err) throw err;
-    const protocol = useHttps ? 'https' : 'http';
-    console.log(`> Ready on ${protocol}://${hostname}:${port}`);
+    console.log(`> Ready on http://${hostname}:${port}`);
     console.log(`> Socket.IO server running`);
-    if (useHttps) {
-      console.log(`> HTTPS enabled - microphone access available`);
-    } else {
-      console.log(`> WARNING: HTTP mode - microphone requires HTTPS (except localhost)`);
-    }
+    console.log(`> localhost is trusted by Chrome for microphone access`);
   });
 });

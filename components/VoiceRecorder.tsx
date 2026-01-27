@@ -59,23 +59,51 @@ export default function VoiceRecorder({
   // Recording functions using native MediaRecorder
   const startRecording = useCallback(async () => {
     try {
-      // Check for microphone support
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setError('Microphone not supported. Try accessing via https:// or localhost');
+      // Debug information
+      console.log('🔍 Protocol:', window.location.protocol);
+      console.log('🔍 Host:', window.location.host);
+      console.log('🔍 isSecureContext:', window.isSecureContext);
+      console.log('🔍 navigator.mediaDevices exists:', !!navigator.mediaDevices);
+
+      // Check for secure context (required for microphone)
+      if (!window.isSecureContext) {
+        setError('Microphone requires HTTPS. Current: ' + window.location.protocol);
         return;
       }
 
-      console.log('🎤 Requesting microphone access...');
+      // Check for microphone support
+      if (!navigator.mediaDevices) {
+        setError('navigator.mediaDevices not available. Need HTTPS or localhost.');
+        return;
+      }
 
-      // Request microphone access
+      if (!navigator.mediaDevices.getUserMedia) {
+        setError('getUserMedia not supported in this browser.');
+        return;
+      }
+
+      // Note: enumerateDevices() only shows device details AFTER permission is granted
+      // So we'll see 0 devices here, but that's OK - getUserMedia() will prompt
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputs = devices.filter(d => d.kind === 'audioinput');
+        console.log('🎤 Audio input devices found (before permission):', audioInputs.length);
+        console.log('🎤 Devices:', audioInputs);
+        // Don't return early - getUserMedia will trigger the permission prompt
+      } catch (enumErr) {
+        console.warn('🎤 Could not enumerate devices:', enumErr);
+      }
+
+      console.log('🎤 About to call getUserMedia...');
+      console.log('🎤 This should trigger permission prompt...');
+
+      // Try with minimal constraints first (iOS Safari can be picky)
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          sampleRate: 16000,
-          echoCancellation: true,
-          noiseSuppression: true
-        }
+        audio: true  // Simplest possible constraint
       });
+
+      console.log('🎤 SUCCESS! Got media stream:', stream);
+      console.log('🎤 Audio tracks:', stream.getAudioTracks());
 
       streamRef.current = stream;
       console.log('🎤 Microphone access granted');

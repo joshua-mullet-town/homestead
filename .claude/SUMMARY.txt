@@ -1,6 +1,6 @@
 ```json
 {
-  "user_summary": "Generate SSH key, create droplet, configure GitHub auth",
-  "agent_summary": "Created DigitalOcean droplet, installed Claude Code, awaiting GitHub PAT"
+  "user_summary": "Fix Web Speech API microphone access, then focus on preview page UI",
+  "agent_summary": "Started test app servers, created preview toggle for terminal/dev interaction"
 }
 ```

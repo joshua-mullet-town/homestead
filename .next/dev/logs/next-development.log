@@ -1,21 +1,29 @@
-[00:03:41.294] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:41.474] Browser LOG     [Socket] Connected
-[00:03:41.474] Browser LOG     [Terminal] Ready: test
-[00:03:42.972] Browser ERROR   Recording failed: {}
-[00:05:08.528] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:08.699] Browser LOG     [Socket] Connected
-[00:05:08.699] Browser LOG     [Terminal] Ready: test
-[00:05:09.893] Browser LOG     🎤 Requesting microphone permission...
-[00:05:09.893] Browser ERROR   🎤 Permission error: {}
-[00:05:09.893] Browser ERROR   Recording failed: {}
-[00:05:23.513] Browser LOG     [Socket] Disconnected
-[00:05:23.513] Browser LOG     [Socket] Connected
-[00:05:23.513] Browser LOG     [Terminal] Ready: test
-[00:06:01.060] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:06:01.447] Browser LOG     [Socket] Connected
-[00:06:01.447] Browser LOG     [Terminal] Ready: test
-[00:06:10.446] Browser ERROR   uncaughtError: ReferenceError: initializeWaveSurfer is not defined
-[00:06:10.446] Browser ERROR   uncaughtError: ReferenceError: waveSurferRef is not defined
-[00:06:40.784] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:06:41.446] Browser LOG     [Socket] Connected
-[00:06:41.446] Browser LOG     [Terminal] Ready: test
+[00:02:26.225] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:26.338] Browser LOG     ✅ Web Speech API available
+[00:02:27.272] Browser LOG     🎤 Starting Web Speech API recording...
+[00:02:27.272] Browser LOG     ❌ Error: not-allowed
+[00:02:27.272] Browser LOG     🛑 Speech recognition ended
+[00:02:35.856] Browser LOG     🎤 Starting Web Speech API recording...
+[00:02:35.857] Browser LOG     ❌ Error: not-allowed
+[00:02:35.857] Browser LOG     🛑 Speech recognition ended
+[00:02:48.389] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:48.389] Browser LOG     ✅ Web Speech API available
+[00:02:50.057] Browser LOG     🎤 Starting Web Speech API recording...
+[00:02:50.057] Browser LOG     ❌ Error: not-allowed
+[00:02:50.057] Browser LOG     🛑 Speech recognition ended
+[00:02:57.070] Browser LOG     🎤 Starting Web Speech API recording...
+[00:02:57.070] Browser LOG     ❌ Error: not-allowed
+[00:02:57.070] Browser LOG     🛑 Speech recognition ended
+[00:13:03.679] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:03.847] Browser LOG     [Socket] Connecting to: http://localhost:3005
+[00:13:03.847] Browser LOG     [Socket] Connected
+[00:13:03.847] Browser LOG     [Terminal] Ready: test
+[00:13:11.138] Browser LOG     [Socket] Connecting to: http://localhost:3005
+[00:13:11.138] Browser LOG     [Socket] Connected
+[00:13:11.138] Browser LOG     [Terminal] Ready: test
+[00:13:30.278] Browser LOG     [Socket] Connecting to: http://localhost:3005
+[00:13:30.278] Browser LOG     [Socket] Connected
+[00:13:30.278] Browser LOG     [Terminal] Ready: test
+[00:13:31.209] Browser LOG     [Socket] Connecting to: http://localhost:3005
+[00:13:31.209] Browser LOG     [Socket] Connected
+[00:13:31.209] Browser LOG     [Terminal] Ready: test
