@@ -34,33 +34,64 @@ runcmd:
   - export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"
   - export GH_TOKEN="{{GITHUB_PAT}}"
 
-  # Create PM2 ecosystem file for terminal server
+  # Detect if project is Next.js and create PM2 ecosystem file
+  - |
+    if grep -q '"next"' /root/project/package.json 2>/dev/null; then
+      echo "Detected Next.js project, will start dev server"
+      HAS_NEXTJS=true
+    else
+      echo "Not a Next.js project, skipping dev server"
+      HAS_NEXTJS=false
+    fi
+
+  # Create PM2 ecosystem file for terminal server (and optionally dev server)
   - |
     cat > /root/homestead/ecosystem.config.js << 'EOFPM2'
     module.exports = {
-      apps: [{
-        name: "homestead",
-        script: "./server.js",
-        cwd: "/root/homestead",
-        instances: 1,
-        autorestart: true,
-        watch: false,
-        env: {
-          NODE_ENV: "development",
-          GH_TOKEN: "{{GITHUB_PAT}}",
-          ANTHROPIC_API_KEY: "{{ANTHROPIC_API_KEY}}"
+      apps: [
+        {
+          name: "homestead",
+          script: "./server.js",
+          cwd: "/root/homestead",
+          instances: 1,
+          autorestart: true,
+          watch: false,
+          env: {
+            NODE_ENV: "development",
+            GH_TOKEN: "{{GITHUB_PAT}}",
+            ANTHROPIC_API_KEY: "{{ANTHROPIC_API_KEY}}"
+          }
         }
-      }]
+      ]
     };
     EOFPM2
 
-  # Start terminal server with PM2
-  - cd /root/homestead && pm2 start ecosystem.config.js
-  - pm2 startup systemd
-  - pm2 save
+  # Add dev server to PM2 config if Next.js detected
+  - |
+    if grep -q '"next"' /root/project/package.json 2>/dev/null; then
+      cat >> /root/homestead/ecosystem.config.js << 'EOFDEV'
 
-  # Start Claude Code in project directory (as background process)
-  - cd /root/project && nohup claude --interactive > /tmp/claude.log 2>&1 &
+    // Add Next.js dev server
+    module.exports.apps.push({
+      name: "dev-server",
+      script: "npm",
+      args: "run dev",
+      cwd: "/root/project",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      env: {
+        NODE_ENV: "development",
+        PORT: "3000"
+      }
+    });
+    EOFDEV
+    fi
+
+  # Start all PM2 apps
+  - cd /root/homestead && pm2 start ecosystem.config.js
+  - pm2 startup systemd -u root --hp /root
+  - pm2 save
 
   # Signal completion
   - echo "Homestead provisioning complete" > /root/READY
