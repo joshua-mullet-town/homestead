@@ -34,7 +34,9 @@ type Issue = {
   id: number;
   number: number;
   title: string;
+  body?: string;
   labels: { name: string }[];
+  html_url: string;
 };
 
 export default function Home() {
@@ -51,6 +53,9 @@ export default function Home() {
   const [newIssueTitle, setNewIssueTitle] = useState('');
   const [newIssueBody, setNewIssueBody] = useState('');
   const [creatingIssue, setCreatingIssue] = useState(false);
+  const [pollingForNewIssue, setPollingForNewIssue] = useState(false);
+  const [provisioningRepo, setProvisioningRepo] = useState<string | null>(null);
+  const [provisioningStatus, setProvisioningStatus] = useState<string>('');
 
   useEffect(() => {
     // Check if we have a GitHub token
@@ -126,13 +131,17 @@ export default function Home() {
     if (!token) return;
 
     try {
+      console.log('[fetchIssues] Fetching issues for:', repo.full_name);
       const res = await fetch(`https://api.github.com/repos/${repo.full_name}/issues?state=open`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
         const issueData = await res.json();
+        console.log('[fetchIssues] Got issues:', issueData.length);
         setIssues(issueData);
         setSelectedRepo(repo);
+      } else {
+        console.error('[fetchIssues] Response not OK:', res.status, res.statusText);
       }
     } catch (e) {
       console.error('Failed to fetch issues:', e);
@@ -168,6 +177,44 @@ export default function Home() {
     localStorage.setItem('hidden_repos', JSON.stringify(Array.from(newHidden)));
   };
 
+  const startSession = async (repo: Repo) => {
+    setProvisioningRepo(repo.full_name);
+    setProvisioningStatus('Creating droplet...');
+
+    try {
+      const response = await fetch('/api/droplets/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          repoUrl: `https://github.com/${repo.full_name}.git`,
+          repoName: repo.name,
+          branchName: `session-${Date.now()}`,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create droplet');
+      }
+
+      setProvisioningStatus('Waiting for droplet to become active...');
+      const result = await response.json();
+
+      setProvisioningStatus('Droplet ready! Redirecting to terminal...');
+      console.log('[startSession] Droplet created:', result);
+
+      // Redirect to terminal
+      window.location.href = `/terminal/${result.sessionId}?ip=${result.ip}`;
+    } catch (error) {
+      console.error('[startSession] Error:', error);
+      alert(`Failed to start session: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setProvisioningRepo(null);
+      setProvisioningStatus('');
+    }
+  };
+
   const createIssue = async () => {
     if (!selectedRepo || !newIssueTitle.trim()) return;
 
@@ -187,16 +234,55 @@ export default function Home() {
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[createIssue] Failed:', response.status, errorText);
         throw new Error('Failed to create issue');
       }
 
-      // Refresh issues list
-      fetchIssues(selectedRepo);
+      const newIssue = await response.json();
+      console.log('[createIssue] Created issue:', newIssue.number);
 
-      // Close modal and reset form
+      // Close modal and show polling state
       setShowCreateIssue(false);
       setNewIssueTitle('');
       setNewIssueBody('');
+      setPollingForNewIssue(true);
+
+      // Poll for the new issue (GitHub API can be eventually consistent)
+      const maxAttempts = 10;
+      const delayMs = 500;
+      let found = false;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        console.log(`[createIssue] Poll attempt ${attempt}/${maxAttempts}...`);
+
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+
+        const token = localStorage.getItem('github_token');
+        const res = await fetch(`https://api.github.com/repos/${selectedRepo.full_name}/issues?state=open`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.ok) {
+          const issueData = await res.json();
+          console.log(`[createIssue] Found ${issueData.length} issues`);
+
+          // Check if our new issue is in the list
+          if (issueData.some((issue: Issue) => issue.number === newIssue.number)) {
+            console.log('[createIssue] New issue found!');
+            setIssues(issueData);
+            found = true;
+            break;
+          }
+        }
+      }
+
+      if (!found) {
+        console.warn('[createIssue] Polling timed out, doing final refresh');
+        await fetchIssues(selectedRepo);
+      }
+
+      setPollingForNewIssue(false);
     } catch (err) {
       console.error('Error creating issue:', err);
       alert('Failed to create issue. Please try again.');
@@ -333,6 +419,71 @@ export default function Home() {
     );
   }
 
+  // Issue detail view
+  if (selectedIssue) {
+    return (
+      <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
+        <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
+          {/* Back Button */}
+          <button
+            onClick={() => setSelectedIssue(null)}
+            className="card-yellow shadow-retro-lg p-3 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
+          >
+            <ChevronLeftIcon className="w-6 h-6" />
+          </button>
+
+          {/* Issue Header */}
+          <div className="card-white shadow-retro-xl p-6 mb-4">
+            <div className="flex items-start gap-3 mb-3">
+              {selectedIssue.labels.some(l => l.name.includes('bug')) ? (
+                <BugIcon className="w-8 h-8 flex-shrink-0" />
+              ) : selectedIssue.labels.some(l => l.name.includes('feature')) ? (
+                <LightbulbIcon className="w-8 h-8 flex-shrink-0" />
+              ) : (
+                <CodeIcon className="w-8 h-8 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <h1 className="text-xl text-[rgb(var(--color-black))] font-black mb-1">
+                  #{selectedIssue.number}
+                </h1>
+                <h2 className="text-2xl text-[rgb(var(--color-black))] font-black leading-tight">
+                  {selectedIssue.title}
+                </h2>
+              </div>
+            </div>
+
+            {/* Issue Description */}
+            {selectedIssue.body && (
+              <div className="mt-6 pt-6 border-t-4 border-[rgb(var(--color-black))]">
+                <h3 className="text-xl text-[rgb(var(--color-black))] font-black mb-3">
+                  DESCRIPTION
+                </h3>
+                <div className="text-lg text-[rgb(var(--color-black))] font-bold whitespace-pre-wrap leading-relaxed">
+                  {selectedIssue.body}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* View on GitHub Button */}
+          <a
+            href={selectedIssue.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full card-yellow shadow-retro-lg p-4 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all block text-center"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <LinkIcon className="w-6 h-6" />
+              <span className="text-xl text-[rgb(var(--color-black))] font-black">VIEW ON GITHUB</span>
+            </div>
+          </a>
+
+          {/* TODO: Add comment/close/label actions here */}
+        </div>
+      </div>
+    );
+  }
+
   // Issues list view
   if (selectedRepo) {
     return (
@@ -369,6 +520,23 @@ export default function Home() {
               <span className="text-xl text-[rgb(var(--color-black))] font-black">CREATE ISSUE</span>
             </div>
           </button>
+
+          {/* Polling Indicator */}
+          {pollingForNewIssue && (
+            <div className="card-white shadow-retro-xl p-6 mb-4 animate-pulse">
+              <div className="flex items-center justify-center gap-3">
+                <ReloadIcon className="w-8 h-8 animate-spin" />
+                <div>
+                  <p className="text-2xl text-[rgb(var(--color-black))] font-black">
+                    CREATING ISSUE...
+                  </p>
+                  <p className="text-lg text-[rgb(var(--color-black))]/60 font-bold">
+                    Waiting for GitHub to sync
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Issues */}
           <div className="space-y-6 pb-6">
@@ -517,7 +685,7 @@ export default function Home() {
         </button>
 
         {/* Repos */}
-        <div className="grid grid-cols-2 gap-6 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
           {displayRepos.length === 0 ? (
             <div className="card-white shadow-retro-xl p-12 text-center">
               <p className="text-4xl text-[rgb(var(--color-black))] font-black">
@@ -532,10 +700,11 @@ export default function Home() {
           ) : (
             displayRepos.map((repo) => {
               const isHidden = hiddenRepos.has(repo.id);
+              const isProvisioning = provisioningRepo === repo.full_name;
 
               return (
+                <div key={repo.id} className={`card-white shadow-retro-lg p-4 ${manageMode && isHidden ? 'opacity-40' : ''}`}>
                   <button
-                    key={repo.id}
                     onClick={() => {
                       if (manageMode) {
                         toggleHideRepo(repo.id);
@@ -543,9 +712,7 @@ export default function Home() {
                         fetchIssues(repo);
                       }
                     }}
-                    className={`card-white shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all text-left ${
-                      manageMode && isHidden ? 'opacity-40' : ''
-                    }`}
+                    className="w-full text-left mb-3"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -574,6 +741,35 @@ export default function Home() {
                       )}
                     </div>
                   </button>
+
+                  {!manageMode && !isProvisioning && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startSession(repo);
+                      }}
+                      className="w-full card-yellow shadow-retro px-4 py-2 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <ZapIcon className="w-5 h-5" />
+                        <span className="text-lg font-black text-[rgb(var(--color-black))]">
+                          START SESSION
+                        </span>
+                      </div>
+                    </button>
+                  )}
+
+                  {isProvisioning && (
+                    <div className="w-full card-white border-4 border-[rgb(var(--color-black))] px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <ReloadIcon className="w-5 h-5 animate-spin-slow flex-shrink-0" />
+                        <span className="text-base font-black text-[rgb(var(--color-black))]">
+                          {provisioningStatus || 'Starting...'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })
           )}
