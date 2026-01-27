@@ -1,24 +1,27 @@
 # PLAN.md - What We're Doing
 
-## ✅ PATH A COMPLETE - Now Automating
+## ✅ FULL AUTOMATION COMPLETE - Ready for Final Test
 
-**Manual setup proven successful!** Terminal server working on 4GB droplet with Claude Code installed.
-
----
-
-## ✅ AUTOMATION PHASE COMPLETE - Ready for Testing
-
-**All automation steps implemented! Ready for end-to-end manual test.**
+**All automation implemented including seamless Claude Code authentication!**
 
 ### Next Manual Test Steps:
 1. ✅ Open http://localhost:3005 in browser
 2. ✅ Connect GitHub (enter PAT if needed)
-3. ✅ Click any repo's "START SESSION" button
+3. ✅ Click any issue's "START SESSION" button
 4. ⏳ Wait ~3 minutes for provisioning
 5. ⏳ Verify redirect to terminal
-6. ⏳ Test terminal works (run `ls`, `pwd`, etc.)
-7. ⏳ Test Claude Code responds (`claude "what is 2+2"`)
-8. ⏳ Verify correct repo cloned and branch created
+6. ⏳ **NEW:** Verify Claude Code starts automatically with NO prompts
+7. ⏳ **NEW:** Verify no authentication dialog, no color preferences, no permission prompts
+8. ⏳ Test Claude Code is immediately ready to accept instructions
+9. ⏳ Verify correct repo cloned and branch created
+10. ⏳ Test preview toggle (if Next.js project)
+
+**What Should Happen:**
+- Terminal opens with Claude Code already running
+- No "setup-token" prompt
+- No "choose your colors" dialog
+- No "allow this command?" permission prompts
+- Claude Code immediately ready to work with `--dangerously-skip-permissions`
 
 **If test succeeds:** Document final victory and mark as deployment-ready!
 **If test fails:** Debug the specific failure point and fix
