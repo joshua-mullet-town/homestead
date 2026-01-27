@@ -23,8 +23,8 @@ runcmd:
   - cd /root/homestead && npm install
   - cd /root/homestead && npm rebuild node-pty
 
-  # Clone user's selected repo (replaced by API at provision time)
-  - git clone {{REPO_URL}} /root/project
+  # Clone user's selected repo with auth token (replaced by API at provision time)
+  - git clone https://{{GITHUB_PAT}}@github.com/{{REPO_PATH}} /root/project
   - cd /root/project && git checkout -b {{BRANCH_NAME}}
   - cd /root/project && npm install
 

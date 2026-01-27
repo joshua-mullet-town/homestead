@@ -81,7 +81,7 @@ async function waitForDropletActive(dropletId: number, maxWaitMs = 120000): Prom
 }
 
 function loadCloudInitTemplate(variables: {
-  repoUrl: string;
+  repoPath: string;
   branchName: string;
   apiKey: string;
   githubPat: string;
@@ -90,7 +90,7 @@ function loadCloudInitTemplate(variables: {
   const template = readFileSync(templatePath, 'utf-8');
 
   return template
-    .replace(/\{\{REPO_URL\}\}/g, variables.repoUrl)
+    .replace(/\{\{REPO_PATH\}\}/g, variables.repoPath)
     .replace(/\{\{BRANCH_NAME\}\}/g, variables.branchName)
     .replace(/\{\{ANTHROPIC_API_KEY\}\}/g, variables.apiKey)
     .replace(/\{\{GITHUB_PAT\}\}/g, variables.githubPat);
@@ -123,13 +123,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Extract repo path from URL (e.g., "joshua-mullet-town/crowne-vault" from "https://github.com/...")
+    const repoPath = repoUrl.replace(/^https:\/\/github\.com\//, '').replace(/\.git$/, '');
+
     // Generate branch name
     const branch = branchName || (issueNumber ? `issue-${issueNumber}` : `session-${Date.now()}`);
     const sessionId = `${repoName}-${Date.now()}`;
 
     // Load and populate cloud-init template
     const cloudInit = loadCloudInitTemplate({
-      repoUrl,
+      repoPath,
       branchName: branch,
       apiKey: ANTHROPIC_API_KEY!,
       githubPat: GITHUB_PAT!,
