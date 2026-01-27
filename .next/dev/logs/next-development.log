@@ -1,21 +1,21 @@
-[00:00:46.262] Browser LOG     [Socket] Disconnected
-[00:00:46.262] Browser LOG     [Socket] Connected
-[00:00:46.262] Browser LOG     [Terminal] Ready: test
-[00:00:47.367] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:47.452] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:47.683] Browser LOG     [Socket] Connected
-[00:00:47.683] Browser LOG     [Terminal] Ready: test
-[00:00:52.376] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:52.385] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:18.637] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:24.439] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:27.929] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:58.383] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:58.604] Browser LOG     [Socket] Connected
-[00:02:58.604] Browser LOG     [Terminal] Ready: test
-[00:10:40.015] Browser LOG     [Socket] Disconnected
-[00:10:40.187] Browser LOG     [Socket] Connected
-[00:10:40.187] Browser LOG     [Terminal] Ready: test
-[00:13:59.241] Browser LOG     [Socket] Disconnected
-[00:13:59.241] Browser LOG     [Socket] Connected
-[00:13:59.241] Browser LOG     [Terminal] Ready: test
+[00:03:41.294] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:41.474] Browser LOG     [Socket] Connected
+[00:03:41.474] Browser LOG     [Terminal] Ready: test
+[00:03:42.972] Browser ERROR   Recording failed: {}
+[00:05:08.528] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:08.699] Browser LOG     [Socket] Connected
+[00:05:08.699] Browser LOG     [Terminal] Ready: test
+[00:05:09.893] Browser LOG     🎤 Requesting microphone permission...
+[00:05:09.893] Browser ERROR   🎤 Permission error: {}
+[00:05:09.893] Browser ERROR   Recording failed: {}
+[00:05:23.513] Browser LOG     [Socket] Disconnected
+[00:05:23.513] Browser LOG     [Socket] Connected
+[00:05:23.513] Browser LOG     [Terminal] Ready: test
+[00:06:01.060] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:01.447] Browser LOG     [Socket] Connected
+[00:06:01.447] Browser LOG     [Terminal] Ready: test
+[00:06:10.446] Browser ERROR   uncaughtError: ReferenceError: initializeWaveSurfer is not defined
+[00:06:10.446] Browser ERROR   uncaughtError: ReferenceError: waveSurferRef is not defined
+[00:06:40.784] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:41.446] Browser LOG     [Socket] Connected
+[00:06:41.446] Browser LOG     [Terminal] Ready: test

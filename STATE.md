@@ -1,5 +1,97 @@
 # STATE.md - What We Know
 
+## [2026-01-27 15:00] Path B Complete: Voice Dictation + Mobile Polish
+
+**What we built:**
+- Voice recording UI component at bottom of terminal page (VoiceRecorder.tsx)
+- Three-phase workflow: Record → Transcribe → Preview → Send
+- WaveSurfer.js waveform visualization (orange/yellow theme)
+- OpenAI Whisper transcription API endpoint (`/api/transcribe/route.ts`)
+- Font size controls in terminal header (10-32px, zoom in/out buttons)
+- PWA manifest for "Add to Home Screen" on mobile
+- Touch-optimized buttons (48px min height, no keyboard shortcuts)
+
+**Voice recording flow:**
+1. Tap RECORD button → WaveSurfer shows live waveform
+2. Choose: STOP (cancel), PREVIEW (transcribe+edit), or SEND (transcribe+send immediately)
+3. Preview mode shows editable textarea with transcribed text
+4. SEND button submits text to terminal (simulates typing with 10ms delay per char)
+
+**Key learnings:**
+- Adapted holler-next's AudioWorkstation for mobile (removed keyboard shortcuts, larger buttons)
+- WaveSurfer RecordPlugin handles audio capture + visualization in one
+- Message sending simulates typing: splits text into chars, emits with delay, sends Enter
+- Font size must trigger terminal refresh (useEffect watching fontSize state)
+- PWA manifest enables standalone mode on iOS/Android
+
+**Transcription architecture:**
+- **Current:** OpenAI Whisper API (~$0.02/min, cloud-based, 2-5s latency)
+- **Investigated:** Whisper Village uses local whisper.cpp (C++, 100% offline, <1s latency)
+- **Recommendation:** Add Web Speech API as free fallback for MVP, consider local whisper.cpp on droplet later
+- **Implementation:** Transcription backend is abstracted, easy to swap providers
+
+**Files created/modified:**
+- `/components/VoiceRecorder.tsx` (316 lines) - Mobile voice recording component
+- `/app/api/transcribe/route.ts` (68 lines) - OpenAI Whisper API endpoint
+- `/app/terminal/[sessionId]/page.tsx` - Added VoiceRecorder at bottom, font size controls in header
+- `/app/layout.tsx` - Added PWA manifest link + icon metadata
+- `/public/manifest.json` - PWA configuration
+- `/public/icon-*.png` - App icons (192x192, 512x512)
+
+**Mobile polish checklist:**
+- ✅ Voice recording (WaveSurfer visualization)
+- ✅ Font size controls (zoom in/out)
+- ✅ PWA manifest (add to home screen)
+- ✅ Touch-friendly buttons (48px min height)
+- ✅ Full-screen terminal layout
+- ✅ Bottom recording bar (doesn't block terminal)
+
+**Path B Status:** Complete and ready for testing on mobile
+
+---
+
+## [2026-01-27 11:30] Droplet Infrastructure Research
+
+**Research findings for Path A implementation:**
+
+### Claude Code Authentication on Remote Servers
+- Current Claude Code CLI requires OAuth through local browser (not headless-friendly)
+- **SSH port forwarding workaround**: Run `claude /login` on remote server, forward port with `ssh -L`, complete OAuth on local machine, token transmits back to remote
+- For automated setup: Can use GitHub PAT via environment variable (`GH_TOKEN`) which GitHub CLI recognizes by default
+- Note: GitHub MCP server has separate auth from gh CLI (would need separate PAT)
+
+### DigitalOcean Droplet Provisioning Time
+- **Typical provisioning: "a few minutes"** (some sources say 10-15 minutes for full setup)
+- Droplet shows IP address when ready
+- API flow: POST to `/v2/droplets` → provisioning → IP available
+- Billing: CPU droplets billed per-second (minimum 60s or $0.01) as of Jan 2026
+- **Conclusion**: Sub-60s goal is aggressive but possible with cloud-init
+
+### Cloud-Init for Node.js Setup
+- DigitalOcean supports cloud-init on Ubuntu/CentOS images
+- Can install packages, configure services, set up SSH keys automatically
+- Script runs as root on first boot
+- Example: Install Node.js, npm, git, clone repo, start services
+- Must start with `#cloud-config` on first line
+
+### Accessing Multiple Ports from Mobile
+- **Same IP, different ports works fine**: `http://<ip>:3005` for terminal, `http://<ip>:3000` for dev server
+- Mobile browsers handle port numbers in URLs without issue
+- Local network access (same Wi-Fi): Just use IP:port directly
+- Remote access: Can use ngrok, cloudflared, or expose ports directly
+- **Decision**: Start with raw IP addresses + port numbers, add domain later if needed
+
+**Next steps:** Manual droplet creation and testing the full flow.
+
+**Sources:**
+- [Claude Code Remote Authentication Issue #7100](https://github.com/anthropics/claude-code/issues/7100)
+- [Claude Code SDK Docker Authentication Docs](https://github.com/cabinlab/claude-code-sdk-docker/blob/main/docs/AUTHENTICATION.md)
+- [DigitalOcean API Overview](https://docs.digitalocean.com/reference/api/)
+- [DigitalOcean Cloud-Init Tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-cloud-config-for-your-initial-server-setup)
+- [Accessing Localhost from Mobile Devices](https://www.silvestar.codes/articles/testing-localhost-on-multiple-devices/)
+
+---
+
 ## [2026-01-26 15:45] Terminal Streaming Working on Mobile
 
 **What we built:**

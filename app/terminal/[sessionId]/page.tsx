@@ -1,17 +1,21 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
+import VoiceRecorder from '@/components/VoiceRecorder';
+import { ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function TerminalPage() {
   const params = useParams();
   const sessionId = params.sessionId as string;
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<any>(null);
+  const fitAddonRef = useRef<any>(null);
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState(14);
 
   useEffect(() => {
     let xterm: any;
@@ -32,7 +36,7 @@ export default function TerminalPage() {
         xterm = new Terminal({
           cols: 100,
           rows: 30,
-          fontSize: 14,
+          fontSize: fontSize,
           fontFamily: 'Menlo, Monaco, "Courier New", monospace',
           cursorBlink: true,
           theme: {
@@ -46,6 +50,7 @@ export default function TerminalPage() {
 
         fitAddon = new FitAddon();
         xterm.loadAddon(fitAddon);
+        fitAddonRef.current = fitAddon;
 
         // Mount terminal
         if (terminalRef.current) {
@@ -54,9 +59,10 @@ export default function TerminalPage() {
           xtermRef.current = xterm;
         }
 
-        // Connect to Socket.IO - use current hostname so it works on mobile
+        // Connect to Socket.IO - use current hostname and protocol
+        const protocol = typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'https' : 'http';
         const socketUrl = typeof window !== 'undefined'
-          ? `http://${window.location.hostname}:3005`
+          ? `${protocol}://${window.location.hostname}:3005`
           : 'http://localhost:3005';
 
         const socket = io(socketUrl, {
@@ -141,12 +147,41 @@ export default function TerminalPage() {
     return () => {
       mounted = false;
     };
+  }, [sessionId]); // Removed fontSize from dependencies
+
+  // Handle font size change - update without reinitializing
+  useEffect(() => {
+    if (xtermRef.current && fitAddonRef.current) {
+      xtermRef.current.options.fontSize = fontSize;
+      // Refit terminal to adjust layout after font size change
+      setTimeout(() => {
+        if (fitAddonRef.current) {
+          fitAddonRef.current.fit();
+        }
+      }, 100);
+    }
+  }, [fontSize]);
+
+  // Handle sending messages from voice recorder
+  const handleSendMessage = useCallback((message: string) => {
+    if (socketRef.current && message.trim()) {
+      // Send each character individually to simulate typing
+      message.split('').forEach((char, index) => {
+        setTimeout(() => {
+          socketRef.current?.emit('terminal:input', sessionId, char);
+        }, index * 10);
+      });
+      // Send enter key after the message
+      setTimeout(() => {
+        socketRef.current?.emit('terminal:input', sessionId, '\r');
+      }, message.length * 10 + 100);
+    }
   }, [sessionId]);
 
   return (
-    <div className="fixed inset-0 w-screen h-screen bg-black flex flex-col">
+    <div className="fixed inset-0 w-screen h-screen bg-black flex flex-col overflow-hidden">
       {/* Status Bar */}
-      <div className="bg-gray-900 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
+      <div className="flex-shrink-0 bg-gray-900 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span style={{ fontFamily: 'VT323, monospace' }} className="text-xl text-white">
             TERMINAL: {sessionId}
@@ -158,17 +193,43 @@ export default function TerminalPage() {
             </span>
           </div>
         </div>
-        {error && (
-          <span className="text-sm text-red-400">Error: {error}</span>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Font Size Controls */}
+          <button
+            onClick={() => setFontSize(prev => Math.max(10, prev - 2))}
+            className="p-2 rounded bg-gray-800 hover:bg-gray-700 text-white active:scale-95 transition-transform"
+            title="Decrease font size"
+          >
+            <ZoomOut size={16} />
+          </button>
+          <span className="text-sm text-gray-400 min-w-[3ch] text-center">{fontSize}</span>
+          <button
+            onClick={() => setFontSize(prev => Math.min(32, prev + 2))}
+            className="p-2 rounded bg-gray-800 hover:bg-gray-700 text-white active:scale-95 transition-transform"
+            title="Increase font size"
+          >
+            <ZoomIn size={16} />
+          </button>
+          {error && (
+            <span className="text-sm text-red-400 ml-4">Error: {error}</span>
+          )}
+        </div>
       </div>
 
-      {/* Terminal Container */}
+      {/* Terminal Container - with overflow scroll */}
       <div
         ref={terminalRef}
-        className="flex-1 p-2"
-        style={{ width: '100%', height: '100%' }}
+        className="flex-1 p-2 overflow-auto"
+        style={{ width: '100%' }}
       />
+
+      {/* Voice Recorder at Bottom - Fixed position */}
+      <div className="flex-shrink-0">
+        <VoiceRecorder
+          sessionId={sessionId}
+          onSendMessage={handleSendMessage}
+        />
+      </div>
     </div>
   );
 }

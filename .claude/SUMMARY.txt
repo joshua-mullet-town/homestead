@@ -1,0 +1,6 @@
+```json
+{
+  "user_summary": "Generate SSH key, create droplet, configure GitHub auth",
+  "agent_summary": "Created DigitalOcean droplet, installed Claude Code, awaiting GitHub PAT"
+}
+```

@@ -1,4 +1,6 @@
-const { createServer } = require('http');
+const { createServer: createHttpServer } = require('http');
+const { createServer: createHttpsServer } = require('https');
+const { readFileSync, existsSync } = require('fs');
 const { parse } = require('url');
 const next = require('next');
 const { Server } = require('socket.io');
@@ -11,6 +13,13 @@ const port = 3005;
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
+
+// Check for SSL certificates
+const useHttps = existsSync('localhost-key.pem') && existsSync('localhost-cert.pem');
+const httpsOptions = useHttps ? {
+  key: readFileSync('localhost-key.pem'),
+  cert: readFileSync('localhost-cert.pem')
+} : null;
 
 // Terminal manager
 class TerminalManager {
@@ -91,16 +100,28 @@ class TerminalManager {
 }
 
 app.prepare().then(() => {
-  const server = createServer(async (req, res) => {
-    try {
-      const parsedUrl = parse(req.url, true);
-      await handle(req, res, parsedUrl);
-    } catch (err) {
-      console.error('Error occurred handling', req.url, err);
-      res.statusCode = 500;
-      res.end('internal server error');
-    }
-  });
+  // Create HTTP or HTTPS server based on certificate availability
+  const server = useHttps
+    ? createHttpsServer(httpsOptions, async (req, res) => {
+        try {
+          const parsedUrl = parse(req.url, true);
+          await handle(req, res, parsedUrl);
+        } catch (err) {
+          console.error('Error occurred handling', req.url, err);
+          res.statusCode = 500;
+          res.end('internal server error');
+        }
+      })
+    : createHttpServer(async (req, res) => {
+        try {
+          const parsedUrl = parse(req.url, true);
+          await handle(req, res, parsedUrl);
+        } catch (err) {
+          console.error('Error occurred handling', req.url, err);
+          res.statusCode = 500;
+          res.end('internal server error');
+        }
+      });
 
   const io = new Server(server, {
     cors: {
@@ -170,7 +191,13 @@ app.prepare().then(() => {
 
   server.listen(port, hostname, (err) => {
     if (err) throw err;
-    console.log(`> Ready on http://${hostname}:${port}`);
+    const protocol = useHttps ? 'https' : 'http';
+    console.log(`> Ready on ${protocol}://${hostname}:${port}`);
     console.log(`> Socket.IO server running`);
+    if (useHttps) {
+      console.log(`> HTTPS enabled - microphone access available`);
+    } else {
+      console.log(`> WARNING: HTTP mode - microphone requires HTTPS (except localhost)`);
+    }
   });
 });

@@ -11,11 +11,16 @@ export const metadata: Metadata = {
     maximumScale: 1,
     userScalable: false,
   },
-  themeColor: '#F76218',
+  themeColor: '#FF6600',
+  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'Homestead',
+  },
+  icons: {
+    icon: '/icon-192.png',
+    apple: '/icon-192.png',
   },
 };
 

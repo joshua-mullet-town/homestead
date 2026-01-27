@@ -137,6 +137,7 @@ function TerminalPage() {
     const socketRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const [isConnected, setIsConnected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [fontSize, setFontSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(14);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         let xterm;
         let fitAddon;
@@ -153,7 +154,7 @@ function TerminalPage() {
                 xterm = new Terminal({
                     cols: 100,
                     rows: 30,
-                    fontSize: 14,
+                    fontSize: fontSize,
                     fontFamily: 'Menlo, Monaco, "Courier New", monospace',
                     cursorBlink: true,
                     theme: {
@@ -245,6 +246,32 @@ function TerminalPage() {
             mounted = false;
         };
     }, [
+        sessionId,
+        fontSize
+    ]);
+    // Handle font size change
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (xtermRef.current) {
+            xtermRef.current.options.fontSize = fontSize;
+        }
+    }, [
+        fontSize
+    ]);
+    // Handle sending messages from voice recorder
+    const handleSendMessage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((message)=>{
+        if (socketRef.current && message.trim()) {
+            // Send each character individually to simulate typing
+            message.split('').forEach((char, index)=>{
+                setTimeout(()=>{
+                    socketRef.current?.emit('terminal:input', sessionId, char);
+                }, index * 10);
+            });
+            // Send enter key after the message
+            setTimeout(()=>{
+                socketRef.current?.emit('terminal:input', sessionId, '\r');
+            }, message.length * 10 + 100);
+        }
+    }, [
         sessionId
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -267,7 +294,7 @@ function TerminalPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 151,
+                                lineNumber: 177,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -277,7 +304,7 @@ function TerminalPage() {
                                         className: `w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 181,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -285,19 +312,19 @@ function TerminalPage() {
                                         children: isConnected ? 'Connected' : 'Disconnected'
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 182,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 154,
+                                lineNumber: 180,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 150,
+                        lineNumber: 176,
                         columnNumber: 9
                     }, this),
                     error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -308,13 +335,13 @@ function TerminalPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 162,
+                        lineNumber: 188,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 149,
+                lineNumber: 175,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -326,13 +353,13 @@ function TerminalPage() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 167,
+                lineNumber: 193,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-        lineNumber: 147,
+        lineNumber: 173,
         columnNumber: 5
     }, this);
 }

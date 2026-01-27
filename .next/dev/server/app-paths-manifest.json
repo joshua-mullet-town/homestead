@@ -1,4 +1,3 @@
 {
-  "/page": "app/page.js",
   "/terminal/[sessionId]/page": "app/terminal/[sessionId]/page.js"
 }
