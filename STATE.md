@@ -1,5 +1,29 @@
 # STATE.md - What We Know
 
+## [2026-01-27 19:20] AUTOMATION WORKING: Cloud-Init Provisioning Successful
+
+**MAJOR BREAKTHROUGH**: Cloud-init script successfully provisions droplet from scratch!
+
+**Test Results (Droplet ID: 547623291, IP: 138.197.75.163):**
+- ✅ All packages installed (Node.js v20, npm, PM2, Claude Code)
+- ✅ Homestead terminal server cloned and running
+- ✅ User repo cloned with branch created automatically
+- ✅ PM2 running with correct environment variables
+- ✅ Terminal server accessible from external IP
+- ✅ Claude Code installed and authenticated
+- ⏱️ Total provisioning time: ~3 minutes
+
+**Critical Fix:** Package name is `@anthropic-ai/claude-code` (NOT `@anthropic/claude-code`)
+- Updated cloud-init.yaml with correct package name
+- Ready for API integration
+
+**Next Steps:**
+1. Build `/api/droplets/create` endpoint to call DigitalOcean API
+2. Add "START SESSION" button to UI repo cards
+3. Test full automated flow: click repo → droplet provisions → terminal opens
+
+---
+
 ## [2026-01-27 17:45] PATH A COMPLETE: Remote Terminal Server Working on 4GB Droplet
 
 **MAJOR VICTORY**: Successfully deployed Claude Code-ready terminal server accessible from phone!

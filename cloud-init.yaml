@@ -16,7 +16,7 @@ runcmd:
 
   # Install PM2 and Claude Code
   - npm install -g pm2
-  - npm install -g @anthropic/claude-code
+  - npm install -g @anthropic-ai/claude-code
 
   # Clone homestead terminal server
   - git clone https://github.com/joshua-mullet-town/homestead.git /root/homestead
