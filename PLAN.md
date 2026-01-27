@@ -1,120 +1,287 @@
 # PLAN.md - What We're Doing
 
-## Current Sprint: Two Parallel Paths
+## ✅ PATH A COMPLETE - Now Automating
 
-We're using git worktrees to work on droplet infrastructure and mobile frontend simultaneously.
-
----
-
-## Path A: Droplet Infrastructure (Backend)
-
-**Goal:** Prove Claude Code can run on remote droplet and be accessed from phone
-
-### Next Steps (In Order)
-
-1. **Manual Droplet Setup**
-   - Create DigitalOcean droplet (Ubuntu 22.04, basic plan)
-   - SSH in, install Node.js, npm, git
-   - Install Claude Code CLI
-   - Clone a test Next.js repo
-   - Test running Claude Code manually
-
-2. **GitHub Authentication on Droplet**
-   - Research how others handle GitHub OAuth on remote servers
-   - Try manual `claude auth` on droplet (what does this require?)
-   - Document what credentials/tokens need to be injected
-   - Script the auth process (env vars? GitHub App? Personal token?)
-
-3. **Deploy Terminal Server to Droplet**
-   - Copy homestead repo to droplet
-   - Run `npm install`, start server
-   - Expose port 3005 (or use nginx reverse proxy?)
-   - Test connecting from phone via droplet's IP
-
-4. **Claude Code + Next.js Dev Server**
-   - Start Claude Code session on droplet
-   - Give it instructions to run `npm run dev` on test repo
-   - Expose dev server port (usually 3000)
-   - Test accessing preview from phone
-
-5. **Full Flow Test**
-   - Open terminal on phone
-   - Send Claude Code instructions via terminal
-   - Claude Code makes changes to Next.js app
-   - Preview updates in real-time
-   - **If this works, we've proven the concept!**
-
-6. **Automate Droplet Provisioning**
-   - DigitalOcean API integration
-   - Cloud-init script for setup
-   - Auto-shutdown after inactivity (30min?)
-   - DNS/subdomain management
+**Manual setup proven successful!** Terminal server working on 4GB droplet with Claude Code installed.
 
 ---
 
-## Path B: Mobile Frontend (UX)
+## Current Priority: Automation Phase
 
-**Goal:** Make mobile experience smooth and voice-friendly
+### 1. Automate Droplet Provisioning (HIGH PRIORITY)
 
-### Next Steps (In Order)
+**Goal:** User clicks repo → Droplet spins up automatically → Terminal ready in <2 minutes
 
-1. **Preview Page Implementation**
-   - Create `/app/preview/[sessionId]/page.tsx`
-   - Iframe to droplet's dev server (port 3000)
-   - Handle loading states, errors
-   - Full-screen preview on mobile
+**Implementation Plan:**
+```javascript
+// UI flow: User clicks repo card → API call
+POST /api/droplets/create
+{
+  repoUrl: "https://github.com/user/repo",
+  repoName: "my-nextjs-app"
+}
 
-2. **Navigation Between Terminal and Preview**
-   - Add simple nav bar or floating button
-   - Switch between `/terminal/[sessionId]` and `/preview/[sessionId]`
-   - Remember last viewed (localStorage?)
-   - Smooth transitions
+// Server creates droplet with cloud-init
+- Install Node.js v20, npm, git
+- Install Claude Code CLI
+- Clone selected repo
+- Run npm install
+- Start PM2 with homestead terminal server
+- Auto-start on boot (systemd)
+```
 
-3. **Voice Dictation MVP (Web Speech API)**
-   - Add record button to terminal page
-   - Use browser's Web Speech API (works on iOS/Android)
-   - Show visual feedback (recording, transcribing)
-   - Display transcription before sending
-   - Cancel button if transcription is wrong
-   - Send button to submit to terminal
+**Cloud-init script structure:**
+```yaml
+#cloud-config
+packages:
+  - curl
+  - git
 
-4. **Mobile UX Polish**
-   - Increase terminal font size (or add zoom controls)
-   - PWA manifest for "add to home screen"
-   - Better touch targets (buttons at least 44x44px)
-   - Handle iOS keyboard show/hide gracefully
-   - Test on iPhone Safari and Chrome
+runcmd:
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash
+  - apt-get install -y nodejs
+  - npm install -g npm@latest
+  - npm install -g pm2
+  - npm install -g @anthropic/claude-code
+  - git clone https://github.com/user/repo /root/project
+  - cd /root/project && npm install
+  # TODO: Claude Code auth injection
+  # TODO: Start terminal server
+  - pm2 startup
+  - pm2 save
+```
 
-5. **Cloud Transcription Fallback (If Needed)**
-   - If Web Speech API is too inaccurate
-   - Add Deepgram or OpenAI Whisper API
-   - Record audio, send to API, display result
-   - Handle errors, loading states
+**DigitalOcean API endpoints needed:**
+- `POST /v2/droplets` - Create with cloud-init
+- `GET /v2/droplets/{id}` - Check status
+- `DELETE /v2/droplets/{id}` - Cleanup
+- `GET /v2/droplets/{id}/actions` - Monitor provisioning
 
----
-
-## Backlog (Future Features)
-
-- Session management (list active sessions, kill sessions)
-- Multiple concurrent droplets
-- Cost tracking (DigitalOcean billing)
-- Collaborative sessions (multiple people in same terminal?)
-- Save terminal history/logs
-- Dark mode toggle
-- Terminal themes (like holler-next has)
-
----
-
-## Blockers / Unknowns
-
-- **Droplet provisioning time:** How long from API call to ready? (Target: <60s)
-- **GitHub OAuth on droplet:** What's the cleanest approach?
-- **Domain management:** Do we need unique subdomains per session?
-- **Web Speech API accuracy:** Good enough for coding? Or need cloud transcription?
-- **Cost:** How much do droplets cost per hour? Auto-shutdown critical?
+**Pricing:** $24/month = $0.036/hour for 4GB droplet (billed per-second, $0.01 minimum)
 
 ---
 
-## Completed
+### 2. Automate Claude Code Authentication (HIGH PRIORITY)
 
-(Items will be moved here from top of list when finished, then consolidated into STATE.md)
+**Research findings:**
+
+Based on [Claude Code authentication docs](https://github.com/cabinlab/claude-code-sdk-docker/blob/main/docs/AUTHENTICATION.md) and [headless auth issue](https://github.com/anthropics/claude-code/issues/7100):
+
+**Option A: setup-token (Current Manual Method)**
+- Run `claude setup-token` on droplet
+- Requires Claude subscription
+- Creates long-lived token in `~/.claude/.credentials.json`
+- **Problem:** Requires interactive input (not automatable)
+
+**Option B: Environment Variable (RECOMMENDED)**
+- Set `CLAUDE_CODE_OAUTH_TOKEN` env variable
+- Claude Code prioritizes env vars over subscription
+- **Charges via API pay-as-you-go** (not subscription)
+- Can be injected via cloud-init
+- **Need to research:** How to get long-lived OAuth token from claude.ai
+
+**Option C: Credentials File Injection**
+- Generate token once on local machine
+- Copy `~/.claude/.credentials.json` to droplet via cloud-init
+- **Problem:** Tokens expire, need refresh mechanism
+
+**TODO: Research current Anthropic API token generation**
+- Check claude.ai account settings for "API Keys" or "Long-lived tokens"
+- Test if Anthropic Console has changed auth flow (2026 updates)
+- Determine if subscription vs API billing matters for this use case
+
+**Implementation (once we have token):**
+```yaml
+# In cloud-init:
+runcmd:
+  - export CLAUDE_CODE_OAUTH_TOKEN="<token-from-user-settings>"
+  - echo 'export CLAUDE_CODE_OAUTH_TOKEN="<token>"' >> /root/.bashrc
+```
+
+---
+
+### 3. Auto-Detect and Start Next.js Projects (MEDIUM PRIORITY)
+
+**Goal:** If repo is Next.js, automatically run `npm run dev` on startup
+
+**Detection logic:**
+```javascript
+// In homestead terminal server startup
+function isNextJsProject(repoPath) {
+  const packageJson = JSON.parse(fs.readFileSync(`${repoPath}/package.json`));
+
+  // Check for Next.js dependency
+  if (packageJson.dependencies?.next || packageJson.devDependencies?.next) {
+    return true;
+  }
+
+  // Check for "dev" script with "next dev"
+  if (packageJson.scripts?.dev?.includes('next dev')) {
+    return true;
+  }
+
+  return false;
+}
+
+// If Next.js detected, start dev server
+if (isNextJsProject('/root/project')) {
+  // Start in background with PM2
+  exec('cd /root/project && pm2 start npm --name "dev-server" -- run dev');
+}
+```
+
+**Sources:**
+- [Next.js package.json structure](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/package-json-scripts)
+- [npm run dev explained](https://www.geeksforgeeks.org/npm-run-dev/)
+
+**Port detection:**
+- Next.js defaults to port 3000
+- If 3000 busy, tries 3001, 3002, etc.
+- Parse startup logs to find actual port: `ready - started server on 0.0.0.0:3000`
+
+**Non-Next.js projects:**
+- Don't auto-start anything
+- User can manually run commands via terminal
+- No preview iframe (just terminal)
+- Still useful for backend projects, scripts, CLIs, etc.
+
+---
+
+### 4. Preview Iframe Integration (MEDIUM PRIORITY)
+
+**Goal:** Toggle button switches between terminal and live preview
+
+**Implementation:**
+```typescript
+// /app/terminal/[sessionId]/page.tsx
+const [showPreview, setShowPreview] = useState(false);
+const [previewPort, setPreviewPort] = useState<number | null>(null);
+
+// Listen for dev server startup from terminal output
+socket.on('terminal:output', (sid, data) => {
+  // Parse: "ready - started server on 0.0.0.0:3000"
+  const match = data.match(/started server on.*:(\d+)/);
+  if (match) {
+    setPreviewPort(parseInt(match[1]));
+  }
+});
+
+// Render
+{showPreview && previewPort && (
+  <iframe
+    src={`http://${dropletIp}:${previewPort}`}
+    className="w-full h-full"
+  />
+)}
+```
+
+**UI additions:**
+- Toggle button in header: "PREVIEW" / "TERMINAL"
+- Show loading state while dev server boots
+- Handle iframe load errors (server not ready yet)
+- Auto-refresh on code changes? (HMR should work)
+
+---
+
+### 5. Session Management UI (LOW PRIORITY)
+
+**Goal:** List active droplets, kill sessions, view costs
+
+**Features:**
+- Dashboard page: `/sessions`
+- List all active droplets with:
+  - Repo name
+  - Uptime
+  - Estimated cost
+  - "OPEN TERMINAL" button
+  - "STOP SESSION" button (destroys droplet)
+- Auto-cleanup after 2 hours of inactivity
+- Warning before destroying (unsaved work?)
+
+---
+
+## Automation Roadmap (Next 3 Steps)
+
+### Step 1: Cloud-Init Script v1
+**Owner:** Claude
+**Time estimate:** 1 hour research + 1 hour implementation
+**Deliverable:** Working cloud-init YAML that installs all dependencies
+
+**Tasks:**
+- [ ] Write cloud-init.yaml template
+- [ ] Test on fresh droplet
+- [ ] Verify Node.js, git, PM2, Claude Code all install
+- [ ] Verify terminal server auto-starts
+- [ ] Document any manual steps still required
+
+---
+
+### Step 2: Research Claude Code Token Generation
+**Owner:** User (with Claude's guidance)
+**Time estimate:** 30 minutes
+**Deliverable:** Long-lived OAuth token for cloud-init injection
+
+**Tasks:**
+- [ ] Go to claude.ai account settings
+- [ ] Look for "API Keys", "Tokens", or "Developer" section
+- [ ] Generate long-lived token (or confirm setup-token is only option)
+- [ ] Test token works: `CLAUDE_CODE_OAUTH_TOKEN=<token> claude --help`
+- [ ] Document token generation process in STATE.md
+
+**If no automated token option exists:**
+- Plan B: Use SSH port forwarding for OAuth (like we researched)
+- Plan C: Run `claude setup-token` once, copy credentials file to all droplets
+- Plan D: Contact Anthropic support for headless auth guidance
+
+---
+
+### Step 3: Droplet API Integration
+**Owner:** Claude
+**Time estimate:** 2-3 hours
+**Deliverable:** `/api/droplets/create` endpoint that spins up ready-to-use droplet
+
+**Tasks:**
+- [ ] Create API route: `POST /api/droplets/create`
+- [ ] Accept: `{ repoUrl, repoName }`
+- [ ] Call DigitalOcean API with cloud-init script
+- [ ] Poll for droplet ready status
+- [ ] Return: `{ dropletId, ip, sessionId }`
+- [ ] Update UI to call this endpoint when user clicks repo
+- [ ] Add loading state: "Provisioning droplet... (30s)"
+
+---
+
+## Open Questions
+
+1. **Claude Code API billing:** Does using `CLAUDE_CODE_OAUTH_TOKEN` charge API rates instead of subscription?
+2. **Token expiration:** How long do OAuth tokens last? Need auto-refresh?
+3. **Firewall rules:** Do we need to configure ufw on droplet for security?
+4. **HTTPS for preview:** Do we need Cloudflare tunnel for dev server preview?
+5. **Multi-repo support:** Can one droplet run multiple dev servers (different ports)?
+
+---
+
+## Backlog (Future)
+
+- Voice dictation (requires HTTPS + proper domain)
+- Collaborative sessions (multiple users, one terminal)
+- Terminal history/logs saved to DB
+- Cost tracking dashboard
+- Auto-shutdown based on terminal inactivity
+- GitHub webhook integration (auto-deploy on push)
+
+---
+
+## Sources
+
+**Claude Code Authentication:**
+- [Headless authentication issue](https://github.com/anthropics/claude-code/issues/7100)
+- [Docker authentication docs](https://github.com/cabinlab/claude-code-sdk-docker/blob/main/docs/AUTHENTICATION.md)
+
+**Next.js Detection:**
+- [Package.json scripts](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/package-json-scripts)
+- [npm run dev explained](https://www.geeksforgeeks.org/npm-run-dev/)
+
+**DigitalOcean:**
+- [Cloud-init tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-cloud-config-for-your-initial-server-setup)
+- [Droplet pricing](https://www.digitalocean.com/pricing/droplets)

@@ -1,5 +1,119 @@
 # STATE.md - What We Know
 
+## [2026-01-27 17:45] PATH A COMPLETE: Remote Terminal Server Working on 4GB Droplet
+
+**MAJOR VICTORY**: Successfully deployed Claude Code-ready terminal server accessible from phone!
+
+**Final working setup:**
+- **DigitalOcean Droplet**: 4GB RAM, 2 vCPU ($24/month) - Ubuntu 22.04
+- **IP Address**: 24.199.99.12
+- **URL**: `http://24.199.99.12:3005/terminal/[sessionId]`
+- **Terminal works from phone**: Full xterm.js terminal with Socket.IO streaming
+- **Claude Code installed**: v2.1.20 (manually authenticated via setup-token)
+
+### Critical Wins & Lessons Learned
+
+#### 1. Node.js + Next.js RAM Requirements
+- **1GB droplet**: Crashes constantly, OOM kills during compilation
+- **2GB droplet**: Still crashes (tried both dev and production mode)
+- **4GB droplet**: STABLE - This is the minimum for Next.js 16 + Socket.IO + xterm.js
+- **Community recommendation**: 2GB minimum for simple Next.js, 4GB for production apps
+- **Our stack needs 4GB** due to: Next.js dev mode + Socket.IO + xterm.js + node-pty
+
+**Sources:**
+- [Deploying Next.js on DigitalOcean](https://www.digitalocean.com/community/developer-center/deploying-a-next-js-application-on-a-digitalocean-droplet)
+- [Next.js Memory Usage Issues](https://github.com/vercel/next.js/issues/79588)
+
+#### 2. Node.js v20 IPv6 Binding Issue
+**Problem**: Server listened on `[::1]:3005` (localhost IPv6 only), not accessible from phone
+**Root cause**: Node.js v17+ defaults to IPv6, `'0.0.0.0'` doesn't bind to external interfaces
+**Solution**: Use `'::'` as hostname - listens on ALL IPv4 + IPv6 interfaces
+**Fix**: Changed `server.listen(port, '0.0.0.0')` to `server.listen(port, '::')`
+**Verification**: `ss -tlnp | grep 3005` shows `*:3005 *:*` (all interfaces)
+
+**Sources:**
+- [Node v17 IPv6 default](https://github.com/nodejs/node/issues/40537)
+- [NodeJS defaults to IPv6](https://github.com/nodejs/node/issues/18041)
+
+#### 3. node-pty Platform-Specific Binaries
+**Problem**: `invalid ELF header` - macOS binaries don't work on Linux
+**Cause**: Pushing node_modules with macOS binaries, pulling on Linux droplet
+**Solution**: Always run `npm rebuild node-pty` after git pull on droplet
+**Prevention**: Add node_modules to .gitignore (we already have this, but binaries got in)
+
+#### 4. Hardcoded Paths in Client Code
+**Problem**: Terminal spawned with cwd `/Users/joshuamullet/code` (Mac path) on Linux
+**Root cause**: Client-side page.tsx sent hardcoded path: `socket.emit('terminal:create', sessionId, '/Users/joshuamullet/code')`
+**Solution**: Remove cwd parameter entirely, let server default to `process.env.HOME`
+**Fix**: Changed to `socket.emit('terminal:create', sessionId)` (no cwd)
+
+#### 5. Claude Code Authentication Strategy
+**Manual setup (what we did)**:
+1. SSH into droplet
+2. Run `claude setup-token`
+3. Get long-lived API key from claude.ai
+4. Paste into terminal
+5. Token stored in `~/.claude/config.json`
+
+**For automation** (research needed):
+- Long-lived API keys from claude.ai can be scripted
+- Can potentially inject token into config.json via cloud-init
+- Need to research: does setup-token still work, or new auth required?
+
+#### 6. PM2 Process Management Pitfalls
+- **PM2 restart**: Doesn't reload code from disk, uses in-memory cache
+- **Proper reload**: `pm2 delete all && pm2 start ecosystem.config.js && pm2 save`
+- **max_memory_restart**: Don't set it - causes artificial crashes
+- **Auto-start on reboot**: `pm2 startup && pm2 save` (we did this)
+
+### Current Droplet Configuration
+
+**ecosystem.config.js:**
+```javascript
+module.exports = {
+  apps: [{
+    name: "homestead",
+    script: "./server.js",
+    cwd: "/root/homestead",
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    env: {
+      NODE_ENV: "development",
+      GH_TOKEN: "<github-personal-access-token>"
+    }
+  }]
+};
+```
+
+**Installed software:**
+- Node.js v20.20.0
+- npm v10.8.2
+- git v2.34.1
+- Claude Code CLI v2.1.20
+- PM2 v6.0.14 (with systemd integration)
+
+**SSH key**: `~/.ssh/homestead_droplet` (ed25519, added to DO account)
+**GitHub PAT**: Set as `GH_TOKEN` environment variable (token stored securely, not in repo)
+
+### What Works Now
+✅ Terminal page loads from phone
+✅ Socket.IO connects successfully
+✅ Terminal spawns in /root directory
+✅ Commands work (ls, cd, etc.)
+✅ Claude Code CLI installed and authenticated
+✅ GitHub PAT set as GH_TOKEN environment variable
+✅ Server auto-starts on droplet reboot (PM2 + systemd)
+
+### What's Next (See PLAN.md)
+- [ ] Auto-provision droplets via API
+- [ ] Auto-authenticate Claude Code (script setup-token)
+- [ ] Auto-detect and start Next.js projects (npm run dev)
+- [ ] Preview iframe for dev servers
+- [ ] Cloudflare tunnel for HTTPS + microphone access
+
+---
+
 ## [2026-01-27 16:05] Voice Dictation Blocked by Chrome Security
 
 **Problem discovered**: Chrome blocks microphone/speech API on ALL non-localhost domains, including:
