@@ -10,6 +10,7 @@ export default function TerminalPage() {
   const searchParams = useSearchParams();
   const sessionId = params.sessionId as string;
   const dropletIp = searchParams.get('ip');
+  const previewPort = searchParams.get('port') || '3000'; // Default to 3000, override with ?port=7087
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<any>(null);
   const fitAddonRef = useRef<any>(null);
@@ -247,7 +248,7 @@ export default function TerminalPage() {
         <div className="flex-1 relative bg-white">
           {dropletIp ? (
             <iframe
-              src={`http://${dropletIp}:3000`}
+              src={`http://${dropletIp}:${previewPort}`}
               className="absolute inset-0 w-full h-full border-0 bg-white"
               title="App Preview"
             />
@@ -256,6 +257,7 @@ export default function TerminalPage() {
               <div className="text-center text-gray-500">
                 <p className="text-xl font-bold mb-2">No Preview Available</p>
                 <p>No droplet IP provided</p>
+                <p className="text-sm mt-4">Add ?port=XXXX to URL to specify port (default: 3000)</p>
               </div>
             </div>
           )}
