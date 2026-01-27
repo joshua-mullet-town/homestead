@@ -27,7 +27,7 @@ class TerminalManager {
     this.terminals = new Map();
   }
 
-  createTerminal(sessionId, cwd = '/Users/joshuamullet/code') {
+  createTerminal(sessionId, cwd = process.env.HOME || '/root') {
     if (this.terminals.has(sessionId)) {
       return this.terminals.get(sessionId);
     }
