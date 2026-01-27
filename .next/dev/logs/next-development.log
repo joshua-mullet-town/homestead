@@ -1,29 +1,45 @@
-[00:02:26.225] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:26.338] Browser LOG     ✅ Web Speech API available
-[00:02:27.272] Browser LOG     🎤 Starting Web Speech API recording...
-[00:02:27.272] Browser LOG     ❌ Error: not-allowed
-[00:02:27.272] Browser LOG     🛑 Speech recognition ended
-[00:02:35.856] Browser LOG     🎤 Starting Web Speech API recording...
-[00:02:35.857] Browser LOG     ❌ Error: not-allowed
-[00:02:35.857] Browser LOG     🛑 Speech recognition ended
-[00:02:48.389] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:48.389] Browser LOG     ✅ Web Speech API available
-[00:02:50.057] Browser LOG     🎤 Starting Web Speech API recording...
-[00:02:50.057] Browser LOG     ❌ Error: not-allowed
-[00:02:50.057] Browser LOG     🛑 Speech recognition ended
-[00:02:57.070] Browser LOG     🎤 Starting Web Speech API recording...
-[00:02:57.070] Browser LOG     ❌ Error: not-allowed
-[00:02:57.070] Browser LOG     🛑 Speech recognition ended
-[00:13:03.679] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:03.847] Browser LOG     [Socket] Connecting to: http://localhost:3005
-[00:13:03.847] Browser LOG     [Socket] Connected
-[00:13:03.847] Browser LOG     [Terminal] Ready: test
-[00:13:11.138] Browser LOG     [Socket] Connecting to: http://localhost:3005
-[00:13:11.138] Browser LOG     [Socket] Connected
-[00:13:11.138] Browser LOG     [Terminal] Ready: test
-[00:13:30.278] Browser LOG     [Socket] Connecting to: http://localhost:3005
-[00:13:30.278] Browser LOG     [Socket] Connected
-[00:13:30.278] Browser LOG     [Terminal] Ready: test
-[00:13:31.209] Browser LOG     [Socket] Connecting to: http://localhost:3005
-[00:13:31.209] Browser LOG     [Socket] Connected
-[00:13:31.209] Browser LOG     [Terminal] Ready: test
+[00:00:29.126] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:29.288] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:00:29.288] Browser LOG     [Socket] Connected
+[00:00:29.288] Browser LOG     [Terminal] Ready: test
+[00:00:50.431] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:50.602] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:00:50.602] Browser LOG     [Socket] Connected
+[00:00:50.602] Browser LOG     [Terminal] Ready: test
+[00:01:04.159] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:01:04.159] Browser LOG     [Socket] Connected
+[00:01:04.159] Browser LOG     [Terminal] Ready: test
+[00:01:10.178] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:01:10.178] Browser LOG     [Socket] Connected
+[00:01:10.178] Browser LOG     [Terminal] Ready: test
+[00:01:11.984] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:01:11.984] Browser LOG     [Socket] Connected
+[00:01:11.984] Browser LOG     [Terminal] Ready: test
+[00:01:13.249] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:01:13.249] Browser LOG     [Socket] Connected
+[00:01:13.249] Browser LOG     [Terminal] Ready: test
+[00:01:17.164] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:01:17.164] Browser LOG     [Socket] Connected
+[00:01:17.164] Browser LOG     [Terminal] Ready: test
+[00:02:02.188] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:02:02.188] Browser LOG     [Socket] Connected
+[00:02:02.188] Browser LOG     [Terminal] Ready: test
+[00:02:02.282] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:02:02.282] Browser LOG     [Socket] Connected
+[00:02:02.282] Browser LOG     [Terminal] Ready: test
+[00:02:17.558] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:17.737] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:02:17.737] Browser LOG     [Socket] Connected
+[00:02:17.737] Browser LOG     [Terminal] Ready: test
+[00:03:11.109] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:11.294] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:03:11.294] Browser LOG     [Socket] Connected
+[00:03:11.294] Browser LOG     [Terminal] Ready: test
+[00:06:31.942] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:32.076] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:06:32.076] Browser LOG     [Socket] Connected
+[00:06:32.076] Browser LOG     [Terminal] Ready: test
+[00:10:31.203] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:31.358] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
+[00:10:31.358] Browser LOG     [Socket] Connected
+[00:10:31.358] Browser LOG     [Terminal] Ready: test

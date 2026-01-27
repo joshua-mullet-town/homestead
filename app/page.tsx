@@ -47,6 +47,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [hiddenRepos, setHiddenRepos] = useState<Set<number>>(new Set());
   const [manageMode, setManageMode] = useState(false);
+  const [showCreateIssue, setShowCreateIssue] = useState(false);
+  const [newIssueTitle, setNewIssueTitle] = useState('');
+  const [newIssueBody, setNewIssueBody] = useState('');
+  const [creatingIssue, setCreatingIssue] = useState(false);
 
   useEffect(() => {
     // Check if we have a GitHub token
@@ -320,12 +324,7 @@ export default function Home() {
 
           {/* Create Issue Button */}
           <button
-            onClick={() => {
-              const title = prompt('Issue title:');
-              if (title) {
-                alert('Create issue feature coming soon!\n\nFor now, create issues on GitHub:\n' + `https://github.com/${selectedRepo.full_name}/issues/new`);
-              }
-            }}
+            onClick={() => setShowCreateIssue(true)}
             className="w-full card-yellow shadow-retro-lg p-4 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
           >
             <div className="flex items-center justify-center gap-3">

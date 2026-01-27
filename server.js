@@ -8,7 +8,7 @@ const pty = require('node-pty');
 const os = require('os');
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost'; // localhost for microphone access
+const hostname = '::'; // Listen on all interfaces (IPv6 + IPv4)
 const port = 3005;
 
 const app = next({ dev, hostname, port });

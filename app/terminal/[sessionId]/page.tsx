@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
 import { io, Socket } from 'socket.io-client';
-import VoiceRecorder from '@/components/VoiceRecorder';
 import { ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function TerminalPage() {
@@ -17,6 +15,7 @@ export default function TerminalPage() {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState(14);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     let xterm: any;
@@ -202,13 +201,13 @@ export default function TerminalPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {/* Preview button */}
-          <Link
-            href={`/preview/${sessionId}`}
+          {/* Toggle button */}
+          <button
+            onClick={() => setShowPreview(!showPreview)}
             className="px-3 py-1.5 bg-[#00FF66] text-black font-bold rounded hover:bg-[#FFCC00] transition-colors text-sm"
           >
-            PREVIEW
-          </Link>
+            {showPreview ? 'TERMINAL' : 'PREVIEW'}
+          </button>
 
           {/* Font size controls */}
           <button
@@ -232,20 +231,26 @@ export default function TerminalPage() {
         </div>
       </div>
 
-      {/* Terminal Container - with overflow scroll */}
+      {/* Terminal Container */}
       <div
         ref={terminalRef}
         className="flex-1 p-2 overflow-auto"
-        style={{ width: '100%' }}
+        style={{
+          width: '100%',
+          display: showPreview ? 'none' : 'block'
+        }}
       />
 
-      {/* Voice Recorder at Bottom - Fixed position */}
-      <div className="flex-shrink-0">
-        <VoiceRecorder
-          sessionId={sessionId}
-          onSendMessage={handleSendMessage}
-        />
-      </div>
+      {/* Preview Container */}
+      {showPreview && (
+        <div className="flex-1 relative bg-white">
+          <iframe
+            src="http://localhost:3001"
+            className="absolute inset-0 w-full h-full border-0 bg-white"
+            title="App Preview"
+          />
+        </div>
+      )}
     </div>
   );
 }
