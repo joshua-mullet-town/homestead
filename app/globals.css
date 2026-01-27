@@ -70,6 +70,11 @@
     border: 6px solid rgb(var(--color-black));
   }
 
+  .card-green {
+    background: rgb(var(--color-green));
+    border: 6px solid rgb(var(--color-black));
+  }
+
   /* TEXT EFFECTS */
   .text-outline {
     text-shadow:

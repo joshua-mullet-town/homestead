@@ -54,8 +54,6 @@ export default function Home() {
   const [newIssueBody, setNewIssueBody] = useState('');
   const [creatingIssue, setCreatingIssue] = useState(false);
   const [pollingForNewIssue, setPollingForNewIssue] = useState(false);
-  const [provisioningRepo, setProvisioningRepo] = useState<string | null>(null);
-  const [provisioningStatus, setProvisioningStatus] = useState<string>('');
 
   useEffect(() => {
     // Check if we have a GitHub token
@@ -177,9 +175,8 @@ export default function Home() {
     localStorage.setItem('hidden_repos', JSON.stringify(Array.from(newHidden)));
   };
 
-  const startSession = async (repo: Repo) => {
-    setProvisioningRepo(repo.full_name);
-    setProvisioningStatus('Creating droplet...');
+  const startSessionForIssue = async (issue: Issue, repo: Repo) => {
+    setIsProvisioning(true);
 
     try {
       const response = await fetch('/api/droplets/create', {
@@ -190,7 +187,8 @@ export default function Home() {
         body: JSON.stringify({
           repoUrl: `https://github.com/${repo.full_name}.git`,
           repoName: repo.name,
-          branchName: `session-${Date.now()}`,
+          issueNumber: issue.number,
+          branchName: `issue-${issue.number}`,
         }),
       });
 
@@ -199,19 +197,15 @@ export default function Home() {
         throw new Error(error.error || 'Failed to create droplet');
       }
 
-      setProvisioningStatus('Waiting for droplet to become active...');
       const result = await response.json();
-
-      setProvisioningStatus('Droplet ready! Redirecting to terminal...');
-      console.log('[startSession] Droplet created:', result);
+      console.log('[startSessionForIssue] Droplet created:', result);
 
       // Redirect to terminal
       window.location.href = `/terminal/${result.sessionId}?ip=${result.ip}`;
     } catch (error) {
-      console.error('[startSession] Error:', error);
+      console.error('[startSessionForIssue] Error:', error);
       alert(`Failed to start session: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      setProvisioningRepo(null);
-      setProvisioningStatus('');
+      setIsProvisioning(false);
     }
   };
 
@@ -340,87 +334,11 @@ export default function Home() {
 
   // Issue detail view
   if (selectedIssue) {
-    return (
-      <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-hidden">
-        <div className="h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto w-full">
-          {/* Back Button */}
-          <button
-            onClick={() => setSelectedIssue(null)}
-            className="card-yellow shadow-retro-lg p-3 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </button>
+    console.log('[Issue Detail] selectedIssue:', selectedIssue);
+    console.log('[Issue Detail] body:', selectedIssue.body);
+    console.log('[Issue Detail] body type:', typeof selectedIssue.body);
+    console.log('[Issue Detail] has body?', !!selectedIssue.body);
 
-          {/* Issue Header */}
-          <div className="card-white shadow-retro-xl p-6 mb-4">
-            <h1 className="text-3xl text-[rgb(var(--color-black))] mb-2 leading-tight font-black">
-              #{selectedIssue.number}
-            </h1>
-            <p className="text-lg text-[rgb(var(--color-black))] font-bold leading-tight">
-              {selectedIssue.title}
-            </p>
-          </div>
-
-          {/* Action Area */}
-          <div className="flex-1 flex flex-col justify-center">
-            {!isProvisioning ? (
-              <button
-                onClick={() => setIsProvisioning(true)}
-                className="card-yellow shadow-retro-xl p-8 active:translate-x-4 active:translate-y-4 active:shadow-none transition-all"
-              >
-                <div className="flex flex-col items-center gap-4">
-                  <ZapIcon className="w-16 h-16" />
-                  <span className="text-4xl text-[rgb(var(--color-black))] leading-none font-black">
-                    START
-                  </span>
-                </div>
-              </button>
-            ) : (
-              <div className="card-white shadow-retro-xl p-6">
-                <div className="text-center mb-6">
-                  <div className="mb-4 flex justify-center">
-                    <ReloadIcon className="w-12 h-12 animate-spin-slow" />
-                  </div>
-                  <h2 className="text-3xl text-[rgb(var(--color-black))] mb-2 font-black">
-                    LOADING...
-                  </h2>
-                  <p className="text-lg text-[rgb(var(--color-black))]/60 font-bold">
-                    ~2 MIN
-                  </p>
-                </div>
-
-                {/* Progress Steps */}
-                <div className="space-y-4">
-                  {[
-                    { label: 'CREATE', done: true },
-                    { label: 'CLONE', done: true },
-                    { label: 'INSTALL', done: false },
-                    { label: 'START', done: false },
-                  ].map((step, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className={`w-10 h-10 border-4 border-[rgb(var(--color-black))] flex items-center justify-center transition-all ${
-                        step.done
-                          ? 'bg-[rgb(var(--color-green))] scale-100'
-                          : 'bg-[rgb(var(--color-white))] scale-90'
-                      }`}>
-                        {step.done ? <CheckIcon className="w-6 h-6" /> : <ReloadIcon className="w-5 h-5 animate-spin-slow" />}
-                      </div>
-                      <span className="text-xl font-black text-[rgb(var(--color-black))]">
-                        {step.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Issue detail view
-  if (selectedIssue) {
     return (
       <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
         <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
@@ -453,16 +371,20 @@ export default function Home() {
             </div>
 
             {/* Issue Description */}
-            {selectedIssue.body && (
-              <div className="mt-6 pt-6 border-t-4 border-[rgb(var(--color-black))]">
-                <h3 className="text-xl text-[rgb(var(--color-black))] font-black mb-3">
-                  DESCRIPTION
-                </h3>
+            <div className="mt-6 pt-6 border-t-4 border-[rgb(var(--color-black))]">
+              <h3 className="text-xl text-[rgb(var(--color-black))] font-black mb-3">
+                DESCRIPTION
+              </h3>
+              {selectedIssue.body ? (
                 <div className="text-lg text-[rgb(var(--color-black))] font-bold whitespace-pre-wrap leading-relaxed">
                   {selectedIssue.body}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="text-lg text-[rgb(var(--color-black))]/60 font-bold italic">
+                  No description provided
+                </div>
+              )}
+            </div>
           </div>
 
           {/* View on GitHub Button */}
@@ -478,7 +400,57 @@ export default function Home() {
             </div>
           </a>
 
-          {/* TODO: Add comment/close/label actions here */}
+          {/* Start Session Button */}
+          {!isProvisioning ? (
+            <button
+              onClick={() => selectedRepo && startSessionForIssue(selectedIssue, selectedRepo)}
+              className="w-full card-green shadow-retro-xl p-8 active:translate-x-4 active:translate-y-4 active:shadow-none transition-all"
+            >
+              <div className="flex flex-col items-center gap-4">
+                <ZapIcon className="w-16 h-16" />
+                <span className="text-4xl text-[rgb(var(--color-black))] leading-none font-black">
+                  START SESSION
+                </span>
+              </div>
+            </button>
+          ) : (
+            <div className="card-white shadow-retro-xl p-6">
+              <div className="text-center mb-6">
+                <div className="mb-4 flex justify-center">
+                  <ReloadIcon className="w-12 h-12 animate-spin-slow" />
+                </div>
+                <h2 className="text-3xl text-[rgb(var(--color-black))] mb-2 font-black">
+                  PROVISIONING...
+                </h2>
+                <p className="text-lg text-[rgb(var(--color-black))]/60 font-bold">
+                  ~3 MIN
+                </p>
+              </div>
+
+              {/* Progress Steps */}
+              <div className="space-y-4">
+                {[
+                  { label: 'CREATE DROPLET', done: true },
+                  { label: 'CLONE REPO', done: false },
+                  { label: 'INSTALL DEPS', done: false },
+                  { label: 'START CLAUDE', done: false },
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <div className={`w-10 h-10 border-4 border-[rgb(var(--color-black))] flex items-center justify-center transition-all ${
+                      step.done
+                        ? 'bg-[rgb(var(--color-green))] scale-100'
+                        : 'bg-[rgb(var(--color-white))] scale-90'
+                    }`}>
+                      {step.done ? <CheckIcon className="w-6 h-6" /> : <ReloadIcon className="w-5 h-5 animate-spin-slow" />}
+                    </div>
+                    <span className="text-xl font-black text-[rgb(var(--color-black))]">
+                      {step.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -700,11 +672,10 @@ export default function Home() {
           ) : (
             displayRepos.map((repo) => {
               const isHidden = hiddenRepos.has(repo.id);
-              const isProvisioning = provisioningRepo === repo.full_name;
 
               return (
-                <div key={repo.id} className={`card-white shadow-retro-lg p-4 ${manageMode && isHidden ? 'opacity-40' : ''}`}>
                   <button
+                    key={repo.id}
                     onClick={() => {
                       if (manageMode) {
                         toggleHideRepo(repo.id);
@@ -712,7 +683,9 @@ export default function Home() {
                         fetchIssues(repo);
                       }
                     }}
-                    className="w-full text-left mb-3"
+                    className={`card-white shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all text-left ${
+                      manageMode && isHidden ? 'opacity-40' : ''
+                    }`}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -741,35 +714,6 @@ export default function Home() {
                       )}
                     </div>
                   </button>
-
-                  {!manageMode && !isProvisioning && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        startSession(repo);
-                      }}
-                      className="w-full card-yellow shadow-retro px-4 py-2 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <ZapIcon className="w-5 h-5" />
-                        <span className="text-lg font-black text-[rgb(var(--color-black))]">
-                          START SESSION
-                        </span>
-                      </div>
-                    </button>
-                  )}
-
-                  {isProvisioning && (
-                    <div className="w-full card-white border-4 border-[rgb(var(--color-black))] px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <ReloadIcon className="w-5 h-5 animate-spin-slow flex-shrink-0" />
-                        <span className="text-base font-black text-[rgb(var(--color-black))]">
-                          {provisioningStatus || 'Starting...'}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
               );
             })
           )}
