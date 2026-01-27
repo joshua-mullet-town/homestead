@@ -44,7 +44,7 @@ export default function TerminalPage() {
             foreground: '#d4d4d4',
             cursor: '#d4d4d4',
             cursorAccent: '#1e1e1e',
-            selection: 'rgba(255, 255, 255, 0.3)',
+            selectionBackground: 'rgba(255, 255, 255, 0.3)',
           }
         });
 
