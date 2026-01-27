@@ -243,26 +243,24 @@ export default function TerminalPage() {
         }}
       />
 
-      {/* Preview Container */}
-      {showPreview && (
-        <div className="flex-1 relative bg-white">
-          {dropletIp ? (
-            <iframe
-              src={`http://${dropletIp}:${previewPort}`}
-              className="absolute inset-0 w-full h-full border-0 bg-white"
-              title="App Preview"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <p className="text-xl font-bold mb-2">No Preview Available</p>
-                <p>No droplet IP provided</p>
-                <p className="text-sm mt-4">Add ?port=XXXX to URL to specify port (default: 3000)</p>
-              </div>
+      {/* Preview Container - Keep mounted to prevent reload */}
+      <div className="flex-1 relative bg-white" style={{ display: showPreview ? 'block' : 'none' }}>
+        {dropletIp ? (
+          <iframe
+            src={`http://${dropletIp}:${previewPort}`}
+            className="absolute inset-0 w-full h-full border-0 bg-white"
+            title="App Preview"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-gray-500">
+              <p className="text-xl font-bold mb-2">No Preview Available</p>
+              <p>No droplet IP provided</p>
+              <p className="text-sm mt-4">Add ?port=XXXX to URL to specify port (default: 3000)</p>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

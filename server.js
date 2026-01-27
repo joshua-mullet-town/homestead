@@ -131,6 +131,19 @@ app.prepare().then(() => {
         // Send ready event
         socket.emit('terminal:ready', sessionId);
 
+        // Auto-start Claude Code in project directory after a brief delay
+        setTimeout(() => {
+          if (terminal.ptyProcess) {
+            terminal.ptyProcess.write('cd /root/project\n');
+            setTimeout(() => {
+              terminal.ptyProcess.write('clear\n');
+              setTimeout(() => {
+                terminal.ptyProcess.write('claude\n');
+              }, 100);
+            }, 100);
+          }
+        }, 500);
+
         // Forward PTY data to client
         terminal.ptyProcess.on('data', (data) => {
           socket.emit('terminal:output', sessionId, data);
