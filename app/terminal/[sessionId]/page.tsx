@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 import { ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function TerminalPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const sessionId = params.sessionId as string;
+  const dropletIp = searchParams.get('ip');
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<any>(null);
   const fitAddonRef = useRef<any>(null);
@@ -59,17 +61,16 @@ export default function TerminalPage() {
           xtermRef.current = xterm;
         }
 
-        // Connect to Socket.IO - use current URL (for cloudflare tunnel) or local with port
-        const isCloudflare = typeof window !== 'undefined' && window.location.hostname.includes('trycloudflare.com');
+        // Connect to Socket.IO - use droplet IP if provided, otherwise local
         const protocol = typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'https' : 'http';
 
-        const socketUrl = isCloudflare
-          ? `${protocol}://${window.location.host}` // Use same host for cloudflare (no port)
+        const socketUrl = dropletIp
+          ? `http://${dropletIp}:3005` // Connect to droplet
           : (typeof window !== 'undefined'
               ? `${protocol}://${window.location.hostname}:3005` // Local with explicit port
               : 'http://localhost:3005');
 
-        console.log('[Socket] Connecting to:', socketUrl);
+        console.log('[Socket] Connecting to:', socketUrl, dropletIp ? `(droplet: ${dropletIp})` : '(local)');
 
         const socket = io(socketUrl, {
           transports: ['websocket', 'polling'],
