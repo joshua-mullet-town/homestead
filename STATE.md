@@ -101,9 +101,25 @@ module.exports = {
 ✅ Socket.IO connects successfully
 ✅ Terminal spawns in /root directory
 ✅ Commands work (ls, cd, etc.)
-✅ Claude Code CLI installed and authenticated
+✅ Claude Code CLI installed and **FULLY AUTHENTICATED via ANTHROPIC_API_KEY**
 ✅ GitHub PAT set as GH_TOKEN environment variable
 ✅ Server auto-starts on droplet reboot (PM2 + systemd)
+✅ **Claude Code responds to prompts** - tested with `claude "what is 2+2"` → works!
+
+### Claude Code Authentication - SOLVED ✅
+
+**Solution:** Use `ANTHROPIC_API_KEY` environment variable (NOT `CLAUDE_CODE_OAUTH_TOKEN`)
+- API key from console.anthropic.com (format: `sk-ant-api03-...`)
+- Set in PM2 ecosystem.config.js under `env.ANTHROPIC_API_KEY`
+- Claude Code automatically uses this for API billing
+- **No interactive setup-token required!**
+
+**For cloud-init automation:**
+```yaml
+runcmd:
+  - echo 'export ANTHROPIC_API_KEY="sk-ant-api03-..."' >> /root/.bashrc
+  - export ANTHROPIC_API_KEY="sk-ant-api03-..."
+```
 
 ### What's Next (See PLAN.md)
 - [ ] Auto-provision droplets via API

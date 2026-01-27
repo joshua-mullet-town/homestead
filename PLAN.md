@@ -216,22 +216,27 @@ socket.on('terminal:output', (sid, data) => {
 
 ---
 
-### Step 2: Research Claude Code Token Generation
-**Owner:** User (with Claude's guidance)
-**Time estimate:** 30 minutes
-**Deliverable:** Long-lived OAuth token for cloud-init injection
+### ✅ Step 2: Claude Code Authentication - COMPLETE!
 
-**Tasks:**
-- [ ] Go to claude.ai account settings
-- [ ] Look for "API Keys", "Tokens", or "Developer" section
-- [ ] Generate long-lived token (or confirm setup-token is only option)
-- [ ] Test token works: `CLAUDE_CODE_OAUTH_TOKEN=<token> claude --help`
-- [ ] Document token generation process in STATE.md
+**Solution found:** Use `ANTHROPIC_API_KEY` environment variable
+- Token from console.anthropic.com (format: `sk-ant-api03-...`)
+- Claude Code automatically uses API key when env var is set
+- No interactive setup required!
+- **Tested and working** on droplet
 
-**If no automated token option exists:**
-- Plan B: Use SSH port forwarding for OAuth (like we researched)
-- Plan C: Run `claude setup-token` once, copy credentials file to all droplets
-- Plan D: Contact Anthropic support for headless auth guidance
+**For cloud-init:**
+```yaml
+runcmd:
+  - export ANTHROPIC_API_KEY="sk-ant-api03-..."
+  - echo 'export ANTHROPIC_API_KEY="sk-ant-api03-..."' >> /root/.bashrc
+```
+
+**Added to PM2 config:**
+```javascript
+env: {
+  ANTHROPIC_API_KEY: "sk-ant-api03-..."
+}
+```
 
 ---
 
