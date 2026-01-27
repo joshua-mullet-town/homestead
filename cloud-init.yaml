@@ -3,38 +3,58 @@
 # Installs: Node.js, git, PM2, Claude Code, homestead terminal server
 # Auto-clones selected repo and starts Claude Code session
 
+# Log all provisioning steps with timestamps
+output: { all: '| tee -a /var/log/cloud-init-output.log' }
+
 packages:
   - curl
   - git
   - build-essential
 
 runcmd:
+  # Create provisioning log with timestamps
+  - echo "=== Homestead Cloud-Init Started at $(date -Iseconds) ===" | tee -a /root/provision.log
   # Install Node.js v20
-  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash
-  - apt-get install -y nodejs
-  - npm install -g npm@latest
+  - echo "[$(date -Iseconds)] Installing Node.js v20..." | tee -a /root/provision.log
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash 2>&1 | tee -a /root/provision.log
+  - apt-get install -y nodejs 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Node.js installed: $(node --version)" | tee -a /root/provision.log
+  - npm install -g npm@latest 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] npm updated: $(npm --version)" | tee -a /root/provision.log
 
   # Install PM2 and Claude Code
-  - npm install -g pm2
-  - npm install -g @anthropic-ai/claude-code
+  - echo "[$(date -Iseconds)] Installing PM2 and Claude Code..." | tee -a /root/provision.log
+  - npm install -g pm2 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] PM2 installed: $(pm2 --version)" | tee -a /root/provision.log
+  - npm install -g @anthropic-ai/claude-code 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Claude Code installed: $(claude --version)" | tee -a /root/provision.log
 
   # Clone homestead terminal server
-  - git clone https://github.com/joshua-mullet-town/homestead.git /root/homestead
-  - cd /root/homestead && npm install
-  - cd /root/homestead && npm rebuild node-pty
+  - echo "[$(date -Iseconds)] Cloning homestead terminal server..." | tee -a /root/provision.log
+  - git clone https://github.com/joshua-mullet-town/homestead.git /root/homestead 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Installing homestead dependencies..." | tee -a /root/provision.log
+  - cd /root/homestead && npm install 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Rebuilding node-pty for Linux..." | tee -a /root/provision.log
+  - cd /root/homestead && npm rebuild node-pty 2>&1 | tee -a /root/provision.log
 
   # Clone user's selected repo with auth token (replaced by API at provision time)
-  - git clone https://{{GITHUB_PAT}}@github.com/{{REPO_PATH}} /root/project
-  - cd /root/project && git checkout -b {{BRANCH_NAME}}
-  - cd /root/project && npm install
+  - echo "[$(date -Iseconds)] Cloning user repo: {{REPO_PATH}}" | tee -a /root/provision.log
+  - git clone https://{{GITHUB_PAT}}@github.com/{{REPO_PATH}} /root/project 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Creating branch: {{BRANCH_NAME}}" | tee -a /root/provision.log
+  - cd /root/project && git checkout -b {{BRANCH_NAME}} 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] Installing project dependencies..." | tee -a /root/provision.log
+  - cd /root/project && npm install 2>&1 | tee -a /root/provision.log
 
   # Set environment variables
+  - echo "[$(date -Iseconds)] Setting environment variables..." | tee -a /root/provision.log
   - echo 'export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"' >> /root/.bashrc
   - echo 'export GH_TOKEN="{{GITHUB_PAT}}"' >> /root/.bashrc
   - export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"
   - export GH_TOKEN="{{GITHUB_PAT}}"
+  - echo "[$(date -Iseconds)] Environment variables set" | tee -a /root/provision.log
 
   # Pre-configure Claude Code settings to skip onboarding
+  - echo "[$(date -Iseconds)] Pre-configuring Claude Code settings..." | tee -a /root/provision.log
   - mkdir -p /root/.claude
   - |
     cat > /root/.claude/settings.json << 'EOFCLAUDE'
@@ -50,18 +70,21 @@ runcmd:
       }
     }
     EOFCLAUDE
+  - echo "[$(date -Iseconds)] Claude Code settings created at /root/.claude/settings.json" | tee -a /root/provision.log
 
   # Detect if project is Next.js and create PM2 ecosystem file
+  - echo "[$(date -Iseconds)] Detecting project type..." | tee -a /root/provision.log
   - |
     if grep -q '"next"' /root/project/package.json 2>/dev/null; then
-      echo "Detected Next.js project, will start dev server"
+      echo "[$(date -Iseconds)] Detected Next.js project, will start dev server" | tee -a /root/provision.log
       HAS_NEXTJS=true
     else
-      echo "Not a Next.js project, skipping dev server"
+      echo "[$(date -Iseconds)] Not a Next.js project, skipping dev server" | tee -a /root/provision.log
       HAS_NEXTJS=false
     fi
 
   # Create PM2 ecosystem file for terminal server (and optionally dev server)
+  - echo "[$(date -Iseconds)] Creating PM2 ecosystem config..." | tee -a /root/provision.log
   - |
     cat > /root/homestead/ecosystem.config.js << 'EOFPM2'
     module.exports = {
@@ -84,8 +107,10 @@ runcmd:
     EOFPM2
 
   # Add dev server to PM2 config if Next.js detected
+  - echo "[$(date -Iseconds)] Checking if dev server should be added to PM2..." | tee -a /root/provision.log
   - |
     if grep -q '"next"' /root/project/package.json 2>/dev/null; then
+      echo "[$(date -Iseconds)] Adding Next.js dev server to PM2 config..." | tee -a /root/provision.log
       cat >> /root/homestead/ecosystem.config.js << 'EOFDEV'
 
     // Add Next.js dev server
@@ -106,11 +131,17 @@ runcmd:
     fi
 
   # Start all PM2 apps
-  - cd /root/homestead && pm2 start ecosystem.config.js
-  - env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root -y
-  - pm2 save --force
+  - echo "[$(date -Iseconds)] Starting PM2 apps..." | tee -a /root/provision.log
+  - cd /root/homestead && pm2 start ecosystem.config.js 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] PM2 apps started, configuring auto-start..." | tee -a /root/provision.log
+  - env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root -y 2>&1 | tee -a /root/provision.log
+  - pm2 save --force 2>&1 | tee -a /root/provision.log
+  - echo "[$(date -Iseconds)] PM2 list:" | tee -a /root/provision.log
+  - pm2 list 2>&1 | tee -a /root/provision.log
 
   # Signal completion
-  - echo "Homestead provisioning complete" > /root/READY
+  - echo "[$(date -Iseconds)] Homestead provisioning complete!" | tee -a /root/provision.log
+  - echo "Homestead provisioning complete at $(date -Iseconds)" > /root/READY
+  - echo "[$(date -Iseconds)] READY file created" | tee -a /root/provision.log
 
 # This takes approximately 2-3 minutes to complete

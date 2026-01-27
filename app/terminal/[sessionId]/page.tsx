@@ -2,10 +2,19 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
-import { ZoomIn, ZoomOut } from 'lucide-react';
+import { ZoomIn, ZoomOut, MessageSquare } from 'lucide-react';
+
+// Client-side logging helper
+function logClient(message: string, level = 'INFO') {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] [CLIENT] [${level}] ${message}`;
+  console.log(logMessage);
+}
 
 export default function TerminalPage() {
+  const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const sessionId = params.sessionId as string;
@@ -20,6 +29,8 @@ export default function TerminalPage() {
   const [fontSize, setFontSize] = useState(14);
   const [showPreview, setShowPreview] = useState(false);
 
+  logClient(`Terminal page loaded - sessionId: ${sessionId}, dropletIp: ${dropletIp}, previewPort: ${previewPort}`);
+
   useEffect(() => {
     let xterm: any;
     let fitAddon: any;
@@ -27,15 +38,22 @@ export default function TerminalPage() {
 
     const initTerminal = async () => {
       try {
+        logClient('Initializing terminal...');
         // Dynamically import xterm to avoid SSR issues
+        logClient('Importing xterm modules...');
         const [{ Terminal }, { FitAddon }] = await Promise.all([
           import('@xterm/xterm'),
           import('@xterm/addon-fit')
         ]);
+        logClient('xterm modules imported successfully');
 
-        if (!mounted) return;
+        if (!mounted) {
+          logClient('Component unmounted, aborting terminal init', 'WARN');
+          return;
+        }
 
         // Create terminal instance
+        logClient('Creating terminal instance...');
         xterm = new Terminal({
           cols: 100,
           rows: 30,
@@ -57,9 +75,13 @@ export default function TerminalPage() {
 
         // Mount terminal
         if (terminalRef.current) {
+          logClient('Mounting terminal to DOM...');
           xterm.open(terminalRef.current);
           fitAddon.fit();
           xtermRef.current = xterm;
+          logClient('Terminal mounted successfully');
+        } else {
+          logClient('Terminal ref is null, cannot mount', 'ERROR');
         }
 
         // Connect to Socket.IO - use droplet IP if provided, otherwise local
@@ -71,7 +93,7 @@ export default function TerminalPage() {
               ? `${protocol}://${window.location.hostname}:3005` // Local with explicit port
               : 'http://localhost:3005');
 
-        console.log('[Socket] Connecting to:', socketUrl, dropletIp ? `(droplet: ${dropletIp})` : '(local)');
+        logClient(`Socket.IO connecting to: ${socketUrl} (${dropletIp ? 'droplet' : 'local'})`);
 
         const socket = io(socketUrl, {
           transports: ['websocket', 'polling'],
@@ -79,39 +101,49 @@ export default function TerminalPage() {
         });
 
         socketRef.current = socket;
+        logClient('Socket.IO client created');
 
         socket.on('connect', () => {
-          console.log('[Socket] Connected');
+          logClient('Socket.IO connected successfully');
           setIsConnected(true);
           setError(null);
 
           // Create terminal session (server will default to HOME directory)
+          logClient(`Emitting terminal:create event for session: ${sessionId}`);
           socket.emit('terminal:create', sessionId);
         });
 
         socket.on('disconnect', () => {
-          console.log('[Socket] Disconnected');
+          logClient('Socket.IO disconnected', 'WARN');
           setIsConnected(false);
         });
 
+        socket.on('connect_error', (err) => {
+          logClient(`Socket.IO connect_error: ${err.message}`, 'ERROR');
+          setError(`Connection error: ${err.message}`);
+        });
+
         socket.on('terminal:ready', (sid) => {
-          console.log('[Terminal] Ready:', sid);
+          logClient(`Terminal ready event received for session: ${sid}`);
           xterm.write('\r\n\x1b[1;32mTerminal connected!\x1b[0m\r\n');
         });
 
         socket.on('terminal:output', (sid, data) => {
           if (sid === sessionId) {
+            // Don't log every output - too spammy
             xterm.write(data);
+          } else {
+            logClient(`Received output for wrong session: ${sid} (expected: ${sessionId})`, 'WARN');
           }
         });
 
         socket.on('terminal:exit', (sid, { exitCode }) => {
-          console.log(`[Terminal] Exited with code ${exitCode}`);
+          logClient(`Terminal process exited with code ${exitCode} for session: ${sid}`, 'WARN');
           xterm.write(`\r\n\r\n\x1b[1;31mProcess exited with code ${exitCode}\x1b[0m\r\n`);
         });
 
         socket.on('terminal:error', (sid, message) => {
-          console.error('[Terminal] Error:', message);
+          logClient(`Terminal error for session ${sid}: ${message}`, 'ERROR');
           setError(message);
           xterm.write(`\r\n\x1b[1;31mError: ${message}\x1b[0m\r\n`);
         });
@@ -136,17 +168,24 @@ export default function TerminalPage() {
         window.addEventListener('resize', handleResize);
 
         return () => {
+          logClient('Cleaning up terminal...');
           window.removeEventListener('resize', handleResize);
           if (socket) {
+            logClient(`Emitting terminal:kill for session: ${sessionId}`);
             socket.emit('terminal:kill', sessionId);
             socket.disconnect();
+            logClient('Socket.IO disconnected');
           }
           if (xterm) {
             xterm.dispose();
+            logClient('Terminal disposed');
           }
         };
       } catch (err) {
-        console.error('[Terminal] Init error:', err);
+        logClient(`Terminal init error: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');
+        if (err instanceof Error) {
+          logClient(`Error stack: ${err.stack}`, 'ERROR');
+        }
         setError(err instanceof Error ? err.message : 'Failed to initialize terminal');
       }
     };
@@ -154,6 +193,7 @@ export default function TerminalPage() {
     initTerminal();
 
     return () => {
+      logClient('Component unmounting');
       mounted = false;
     };
   }, [sessionId]); // Removed fontSize from dependencies
@@ -203,6 +243,16 @@ export default function TerminalPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {/* Chat View button */}
+          <button
+            onClick={() => router.push(`/chat/${sessionId}?ip=${dropletIp || 'localhost'}`)}
+            className="px-3 py-1.5 bg-[#FFCC00] text-black font-bold rounded hover:bg-[#00FF66] transition-colors text-sm flex items-center gap-1"
+            title="Switch to Chat View"
+          >
+            <MessageSquare size={14} />
+            CHAT
+          </button>
+
           {/* Toggle button */}
           <button
             onClick={() => setShowPreview(!showPreview)}
