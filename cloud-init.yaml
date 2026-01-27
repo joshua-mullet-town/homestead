@@ -18,16 +18,16 @@ runcmd:
   - echo "[$(date -Iseconds)] Installing Node.js v20..." | tee -a /root/provision.log
   - curl -fsSL https://deb.nodesource.com/setup_20.x | bash 2>&1 | tee -a /root/provision.log
   - apt-get install -y nodejs 2>&1 | tee -a /root/provision.log
-  - echo "[$(date -Iseconds)] Node.js installed: $(node --version)" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] Node.js installed: $(node --version)" | tee -a /root/provision.log'
   - npm install -g npm@latest 2>&1 | tee -a /root/provision.log
-  - echo "[$(date -Iseconds)] npm updated: $(npm --version)" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] npm updated: $(npm --version)" | tee -a /root/provision.log'
 
   # Install PM2 and Claude Code
   - echo "[$(date -Iseconds)] Installing PM2 and Claude Code..." | tee -a /root/provision.log
   - npm install -g pm2 2>&1 | tee -a /root/provision.log
-  - echo "[$(date -Iseconds)] PM2 installed: $(pm2 --version)" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] PM2 installed: $(pm2 --version)" | tee -a /root/provision.log'
   - npm install -g @anthropic-ai/claude-code 2>&1 | tee -a /root/provision.log
-  - echo "[$(date -Iseconds)] Claude Code installed: $(claude --version)" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] Claude Code installed: $(claude --version)" | tee -a /root/provision.log'
 
   # Clone homestead terminal server
   - echo "[$(date -Iseconds)] Cloning homestead terminal server..." | tee -a /root/provision.log
@@ -38,9 +38,9 @@ runcmd:
   - cd /root/homestead && npm rebuild node-pty 2>&1 | tee -a /root/provision.log
 
   # Clone user's selected repo with auth token (replaced by API at provision time)
-  - echo "[$(date -Iseconds)] Cloning user repo: {{REPO_PATH}}" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] Cloning user repo: {{REPO_PATH}}" | tee -a /root/provision.log'
   - git clone https://{{GITHUB_PAT}}@github.com/{{REPO_PATH}} /root/project 2>&1 | tee -a /root/provision.log
-  - echo "[$(date -Iseconds)] Creating branch: {{BRANCH_NAME}}" | tee -a /root/provision.log
+  - 'echo "[$(date -Iseconds)] Creating branch: {{BRANCH_NAME}}" | tee -a /root/provision.log'
   - cd /root/project && git checkout -b {{BRANCH_NAME}} 2>&1 | tee -a /root/provision.log
   - echo "[$(date -Iseconds)] Installing project dependencies..." | tee -a /root/provision.log
   - cd /root/project && npm install 2>&1 | tee -a /root/provision.log
