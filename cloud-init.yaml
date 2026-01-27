@@ -1,0 +1,68 @@
+#cloud-config
+# Homestead Droplet Provisioning Script
+# Installs: Node.js, git, PM2, Claude Code, homestead terminal server
+# Auto-clones selected repo and starts Claude Code session
+
+packages:
+  - curl
+  - git
+  - build-essential
+
+runcmd:
+  # Install Node.js v20
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash
+  - apt-get install -y nodejs
+  - npm install -g npm@latest
+
+  # Install PM2 and Claude Code
+  - npm install -g pm2
+  - npm install -g @anthropic/claude-code
+
+  # Clone homestead terminal server
+  - git clone https://github.com/joshua-mullet-town/homestead.git /root/homestead
+  - cd /root/homestead && npm install
+  - cd /root/homestead && npm rebuild node-pty
+
+  # Clone user's selected repo (replaced by API at provision time)
+  - git clone {{REPO_URL}} /root/project
+  - cd /root/project && git checkout -b {{BRANCH_NAME}}
+  - cd /root/project && npm install
+
+  # Set environment variables
+  - echo 'export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"' >> /root/.bashrc
+  - echo 'export GH_TOKEN="{{GITHUB_PAT}}"' >> /root/.bashrc
+  - export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"
+  - export GH_TOKEN="{{GITHUB_PAT}}"
+
+  # Create PM2 ecosystem file for terminal server
+  - |
+    cat > /root/homestead/ecosystem.config.js << 'EOFPM2'
+    module.exports = {
+      apps: [{
+        name: "homestead",
+        script: "./server.js",
+        cwd: "/root/homestead",
+        instances: 1,
+        autorestart: true,
+        watch: false,
+        env: {
+          NODE_ENV: "development",
+          GH_TOKEN: "{{GITHUB_PAT}}",
+          ANTHROPIC_API_KEY: "{{ANTHROPIC_API_KEY}}"
+        }
+      }]
+    };
+    EOFPM2
+
+  # Start terminal server with PM2
+  - cd /root/homestead && pm2 start ecosystem.config.js
+  - pm2 startup systemd
+  - pm2 save
+
+  # Start Claude Code in project directory (as background process)
+  - cd /root/project && nohup claude --interactive > /tmp/claude.log 2>&1 &
+
+  # Signal completion
+  - echo "Homestead provisioning complete" > /root/READY
+
+# This takes approximately 2-3 minutes to complete

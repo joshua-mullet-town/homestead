@@ -6,6 +6,46 @@
 
 ---
 
+## 🎯 IMMEDIATE NEXT STEPS (For Next Agent)
+
+### 1. Test Cloud-Init Script
+**File:** `/cloud-init.yaml` (already written)
+**Action:** Create a test droplet with this script and verify everything works
+```bash
+# Via DigitalOcean API or web console:
+# - Create droplet with cloud-init.yaml as user_data
+# - Size: s-2vcpu-4gb
+# - SSH key: 53651428
+# - Wait 3-4 minutes for provisioning
+# - SSH in and verify: PM2 running, Claude Code responds, repo cloned
+```
+
+### 2. Build `/api/droplets/create` Endpoint
+**File:** Create `/app/api/droplets/create/route.ts`
+**Action:** Implement DigitalOcean API integration (see Step 3 below for full checklist)
+**Dependencies:**
+- DigitalOcean API token (already have: `dop_v1_3f734f0...`)
+- Cloud-init template from step 1
+- SSH key ID: 53651428
+
+### 3. Update UI to Call Endpoint
+**Files:** Modify repo cards in `/app/page.tsx`
+**Action:**
+- Add "START SESSION" button to each repo card
+- On click: call `/api/droplets/create` with repo details
+- Show loading state: "Provisioning droplet... (2-3 min)"
+- On success: redirect to `/terminal/[sessionId]`
+
+### 4. Test Full Flow End-to-End
+- Click repo → droplet provisions → terminal opens
+- Verify: in correct repo, on correct branch, Claude Code running
+- Test: send Claude Code a prompt, get response
+- Test: make code changes, see if they persist
+
+**Success criteria:** User can go from clicking a repo to working in Claude Code in <3 minutes, fully automated.
+
+---
+
 ## Current Priority: Automation Phase
 
 ### 1. Automate Droplet Provisioning (HIGH PRIORITY)
@@ -183,7 +223,45 @@ socket.on('terminal:output', (sid, data) => {
 
 ---
 
-### 5. Session Management UI (LOW PRIORITY)
+### 5. GitHub Issue Integration (MEDIUM PRIORITY)
+
+**Goal:** Click issue → automatic branch creation → Claude Code ready
+
+**UI Flow:**
+1. User browses repos on homepage
+2. Clicks repo card → shows list of open issues
+3. Clicks issue → API creates droplet with branch `issue-{number}`
+4. Loading screen: "Creating branch issue-123... Provisioning droplet... Starting Claude Code..."
+5. Terminal opens, already in repo directory on correct branch
+6. User starts working immediately
+
+**API changes needed:**
+```typescript
+// /app/api/droplets/create/route.ts
+interface CreateDropletRequest {
+  repoUrl: string;
+  repoName: string;
+  issueNumber?: number;  // NEW: if provided, creates issue branch
+  issueTitle?: string;   // NEW: for context
+}
+
+// Cloud-init branch creation becomes:
+// - git checkout -b issue-123
+// - git push -u origin issue-123  (creates remote branch)
+```
+
+**UI changes needed:**
+- `/app/repos/[owner]/[repo]/issues/page.tsx` - Issue list page
+- Issue card with "START WORKING" button
+- Calls `/api/droplets/create` with issue details
+
+**Future enhancement:**
+- Webhook: When issue created → auto-provision droplet
+- Auto-comment on issue: "Branch `issue-123` created, [view terminal](link)"
+
+---
+
+### 6. Session Management UI (LOW PRIORITY)
 
 **Goal:** List active droplets, kill sessions, view costs
 
@@ -202,17 +280,27 @@ socket.on('terminal:output', (sid, data) => {
 
 ## Automation Roadmap (Next 3 Steps)
 
-### Step 1: Cloud-Init Script v1
-**Owner:** Claude
-**Time estimate:** 1 hour research + 1 hour implementation
-**Deliverable:** Working cloud-init YAML that installs all dependencies
+### ✅ Step 1: Cloud-Init Script v1 - COMPLETE!
+**Deliverable:** `/cloud-init.yaml` template ready for testing
 
-**Tasks:**
-- [ ] Write cloud-init.yaml template
-- [ ] Test on fresh droplet
-- [ ] Verify Node.js, git, PM2, Claude Code all install
-- [ ] Verify terminal server auto-starts
-- [ ] Document any manual steps still required
+**What it does:**
+- ✅ Installs Node.js v20, npm, git, PM2, Claude Code
+- ✅ Clones homestead terminal server
+- ✅ Clones user's selected repo
+- ✅ Creates branch automatically
+- ✅ Runs npm install on both repos
+- ✅ Sets ANTHROPIC_API_KEY and GH_TOKEN env vars
+- ✅ Starts terminal server with PM2
+- ✅ Auto-starts Claude Code in project directory
+- ✅ Configures PM2 systemd startup
+
+**Variables to replace at provision time:**
+- `{{REPO_URL}}` - GitHub repo URL
+- `{{BRANCH_NAME}}` - Branch to create/checkout
+- `{{ANTHROPIC_API_KEY}}` - User's Anthropic API key
+- `{{GITHUB_PAT}}` - User's GitHub personal access token
+
+**NEXT: Test this script on a fresh droplet**
 
 ---
 
@@ -241,18 +329,61 @@ env: {
 ---
 
 ### Step 3: Droplet API Integration
-**Owner:** Claude
+**Status:** NEXT TASK
+**Owner:** Future agent
 **Time estimate:** 2-3 hours
 **Deliverable:** `/api/droplets/create` endpoint that spins up ready-to-use droplet
 
-**Tasks:**
-- [ ] Create API route: `POST /api/droplets/create`
-- [ ] Accept: `{ repoUrl, repoName }`
-- [ ] Call DigitalOcean API with cloud-init script
-- [ ] Poll for droplet ready status
-- [ ] Return: `{ dropletId, ip, sessionId }`
-- [ ] Update UI to call this endpoint when user clicks repo
-- [ ] Add loading state: "Provisioning droplet... (30s)"
+**Implementation checklist:**
+- [ ] Create API route: `/app/api/droplets/create/route.ts`
+- [ ] Accept params: `{ repoUrl, repoName, issueNumber? }`
+- [ ] Load cloud-init.yaml template from `/cloud-init.yaml`
+- [ ] Replace template variables:
+  - `{{REPO_URL}}` with repoUrl
+  - `{{BRANCH_NAME}}` with `issue-${issueNumber}` or `session-${sessionId}`
+  - `{{ANTHROPIC_API_KEY}}` from env var or user settings
+  - `{{GITHUB_PAT}}` from env var or user settings
+- [ ] Call DigitalOcean API: `POST /v2/droplets` with cloud-init
+- [ ] Use SSH key ID: 53651428 (homestead_droplet)
+- [ ] Use size: `s-2vcpu-4gb` ($24/month)
+- [ ] Poll for status: `GET /v2/droplets/{id}` until `status: "active"`
+- [ ] Wait for cloud-init completion: check for `/root/READY` file via SSH
+- [ ] Return: `{ dropletId, ip, sessionId, repoName, branch }`
+- [ ] Update UI repo card to show "OPEN TERMINAL" button
+- [ ] Add loading state with progress: "Provisioning (30s)... Installing deps (60s)... Ready!"
+
+**Code structure:**
+```typescript
+// /app/api/droplets/create/route.ts
+export async function POST(request: Request) {
+  const { repoUrl, repoName, issueNumber } = await request.json();
+
+  // 1. Load and populate cloud-init template
+  const cloudInit = await loadCloudInitTemplate({
+    repoUrl,
+    branchName: issueNumber ? `issue-${issueNumber}` : `session-${Date.now()}`,
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    githubPat: process.env.GH_TOKEN
+  });
+
+  // 2. Create droplet via DO API
+  const droplet = await createDroplet({
+    name: `homestead-${repoName}-${Date.now()}`,
+    region: 'nyc3',
+    size: 's-2vcpu-4gb',
+    image: 'ubuntu-22-04-x64',
+    ssh_keys: [53651428],
+    user_data: cloudInit
+  });
+
+  // 3. Poll until ready
+  await waitForDropletActive(droplet.id);
+  await waitForCloudInitComplete(droplet.ip);
+
+  // 4. Return details
+  return { dropletId: droplet.id, ip: droplet.ip, ... };
+}
+```
 
 ---
 

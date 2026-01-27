@@ -1,6 +1,6 @@
 ```json
 {
-  "user_summary": "Fix preview background, plan PWA with stable GitHub dashboard",
-  "agent_summary": "Fixed preview styling, discussed frontend architecture strategy next"
+  "user_summary": "Summarize coding session in minimal words",
+  "agent_summary": "Documented Path A victories, automation roadmap, Claude Code authentication"
 }
 ```

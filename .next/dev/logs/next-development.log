@@ -43,3 +43,24 @@
 [00:10:31.358] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
 [00:10:31.358] Browser LOG     [Socket] Connected
 [00:10:31.358] Browser LOG     [Terminal] Ready: test
+[00:33:05.911] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:33:37.651] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:41:52.559] Browser LOG     [Socket] Disconnected
+[00:41:52.820] Browser LOG     [Socket] Connected
+[00:41:52.820] Browser LOG     [Terminal] Ready: test
+[00:41:53.286] Browser LOG     [Socket] Disconnected
+[00:41:54.284] Browser LOG     [Socket] Connected
+[00:41:54.284] Browser LOG     [Terminal] Ready: test
+[02:08:54.011] Browser LOG     [Socket] Disconnected
+[02:08:54.011] Browser LOG     [Socket] Connected
+[02:08:54.011] Browser LOG     [Terminal] Ready: test
+[02:08:54.954] Browser LOG     [Socket] Disconnected
+[02:08:55.945] Browser LOG     [Socket] Connected
+[02:08:55.945] Browser LOG     [Terminal] Ready: test
+[03:40:11.326] Browser LOG     [Socket] Disconnected
+[03:40:11.326] Browser LOG     [Socket] Connected
+[03:40:11.326] Browser LOG     [Terminal] Ready: test
+[03:40:11.883] Browser LOG     [Socket] Disconnected
+[03:40:12.877] Browser LOG     [Socket] Connected
+[03:40:12.877] Browser LOG     [Terminal] Ready: test
+[05:52:09.113] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

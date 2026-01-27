@@ -168,6 +168,43 @@ export default function Home() {
     localStorage.setItem('hidden_repos', JSON.stringify(Array.from(newHidden)));
   };
 
+  const createIssue = async () => {
+    if (!selectedRepo || !newIssueTitle.trim()) return;
+
+    setCreatingIssue(true);
+    try {
+      const token = localStorage.getItem('github_token');
+      const response = await fetch(`https://api.github.com/repos/${selectedRepo.full_name}/issues`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: newIssueTitle,
+          body: newIssueBody || undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create issue');
+      }
+
+      // Refresh issues list
+      fetchIssues(selectedRepo);
+
+      // Close modal and reset form
+      setShowCreateIssue(false);
+      setNewIssueTitle('');
+      setNewIssueBody('');
+    } catch (err) {
+      console.error('Error creating issue:', err);
+      alert('Failed to create issue. Please try again.');
+    } finally {
+      setCreatingIssue(false);
+    }
+  };
+
   const visibleRepos = repos.filter(r => !hiddenRepos.has(r.id));
   const displayRepos = manageMode ? repos : visibleRepos;
 
@@ -372,6 +409,71 @@ export default function Home() {
               ))
             )}
           </div>
+
+          {/* Create Issue Modal */}
+          {showCreateIssue && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-6 z-50">
+              <div className="card-white shadow-retro-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <h2 className="text-3xl text-[rgb(var(--color-black))] font-black mb-6">
+                  CREATE NEW ISSUE
+                </h2>
+
+                {/* Title Input */}
+                <div className="mb-4">
+                  <label className="block text-xl text-[rgb(var(--color-black))] font-black mb-2">
+                    TITLE
+                  </label>
+                  <input
+                    type="text"
+                    value={newIssueTitle}
+                    onChange={(e) => setNewIssueTitle(e.target.value)}
+                    className="w-full p-3 border-4 border-[rgb(var(--color-black))] text-xl font-bold"
+                    placeholder="Issue title..."
+                    autoFocus
+                  />
+                </div>
+
+                {/* Body Textarea */}
+                <div className="mb-6">
+                  <label className="block text-xl text-[rgb(var(--color-black))] font-black mb-2">
+                    DESCRIPTION
+                  </label>
+                  <textarea
+                    value={newIssueBody}
+                    onChange={(e) => setNewIssueBody(e.target.value)}
+                    className="w-full p-3 border-4 border-[rgb(var(--color-black))] text-lg font-bold min-h-[200px]"
+                    placeholder="Describe the issue... (optional)"
+                  />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={createIssue}
+                    disabled={!newIssueTitle.trim() || creatingIssue}
+                    className="flex-1 card-yellow shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span className="text-xl text-[rgb(var(--color-black))] font-black">
+                      {creatingIssue ? 'CREATING...' : 'CREATE'}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowCreateIssue(false);
+                      setNewIssueTitle('');
+                      setNewIssueBody('');
+                    }}
+                    disabled={creatingIssue}
+                    className="flex-1 card-white shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all disabled:opacity-50"
+                  >
+                    <span className="text-xl text-[rgb(var(--color-black))] font-black">
+                      CANCEL
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );

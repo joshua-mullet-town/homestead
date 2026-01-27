@@ -121,12 +121,27 @@ runcmd:
   - export ANTHROPIC_API_KEY="sk-ant-api03-..."
 ```
 
-### What's Next (See PLAN.md)
-- [ ] Auto-provision droplets via API
-- [ ] Auto-authenticate Claude Code (script setup-token)
-- [ ] Auto-detect and start Next.js projects (npm run dev)
-- [ ] Preview iframe for dev servers
-- [ ] Cloudflare tunnel for HTTPS + microphone access
+### Session End Summary
+
+**What we accomplished today:**
+1. ✅ Deployed working terminal server on 4GB droplet
+2. ✅ Fixed IPv6 binding issue (use `'::'` hostname)
+3. ✅ Solved Claude Code authentication (ANTHROPIC_API_KEY)
+4. ✅ Tested Claude Code live - responds to prompts
+5. ✅ Created complete cloud-init.yaml for automation
+6. ✅ Documented entire automation roadmap
+
+**What's ready for next agent:**
+- Cloud-init script ready to test
+- Clear 4-step automation plan in PLAN.md
+- All credentials documented (API keys, SSH keys, tokens)
+- Working manual setup as reference
+
+**Next session priorities:**
+1. Test cloud-init.yaml on fresh droplet
+2. Build `/api/droplets/create` endpoint
+3. Connect UI to trigger provisioning
+4. Test full end-to-end flow
 
 ---
 
