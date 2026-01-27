@@ -138,7 +138,7 @@ app.prepare().then(() => {
             setTimeout(() => {
               terminal.ptyProcess.write('clear\n');
               setTimeout(() => {
-                terminal.ptyProcess.write('claude\n');
+                terminal.ptyProcess.write('claude --dangerously-skip-permissions\n');
               }, 100);
             }, 100);
           }

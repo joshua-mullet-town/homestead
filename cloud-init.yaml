@@ -34,6 +34,23 @@ runcmd:
   - export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"
   - export GH_TOKEN="{{GITHUB_PAT}}"
 
+  # Pre-configure Claude Code settings to skip onboarding
+  - mkdir -p /root/.claude
+  - |
+    cat > /root/.claude/settings.json << 'EOFCLAUDE'
+    {
+      "credentials": {
+        "apiKey": "{{ANTHROPIC_API_KEY}}"
+      },
+      "onboardingComplete": true,
+      "dangerouslySkipPermissions": true,
+      "theme": {
+        "primaryColor": "orange",
+        "accentColor": "yellow"
+      }
+    }
+    EOFCLAUDE
+
   # Detect if project is Next.js and create PM2 ecosystem file
   - |
     if grep -q '"next"' /root/project/package.json 2>/dev/null; then
@@ -90,8 +107,8 @@ runcmd:
 
   # Start all PM2 apps
   - cd /root/homestead && pm2 start ecosystem.config.js
-  - pm2 startup systemd -u root --hp /root
-  - pm2 save
+  - env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root -y
+  - pm2 save --force
 
   # Signal completion
   - echo "Homestead provisioning complete" > /root/READY
