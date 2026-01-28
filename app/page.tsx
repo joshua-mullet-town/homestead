@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 // Simple icon components with default sizing
 const HomeIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>;
@@ -15,6 +16,8 @@ const LightbulbIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="
 const CodeIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>;
 const PlusIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>;
 const ChevronLeftIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>;
+const TerminalIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.41-1.41L8.67 13l-2.58-2.59L7.5 9l4 4-4 4z"/></svg>;
+const TrashIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>;
 
 type User = {
   login: string;
@@ -40,12 +43,19 @@ type Issue = {
 };
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
-  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [isProvisioning, setIsProvisioning] = useState(false);
+
+  // Get selected repo and issue from URL
+  const selectedRepoName = searchParams.get('repo');
+  const selectedIssueNumber = searchParams.get('issue');
+
+  const selectedRepo = repos.find(r => r.full_name === selectedRepoName) || null;
+  const selectedIssue = issues.find(i => i.number === Number(selectedIssueNumber)) || null;
   const [loading, setLoading] = useState(true);
   const [hiddenRepos, setHiddenRepos] = useState<Set<number>>(new Set());
   const [manageMode, setManageMode] = useState(false);
@@ -54,6 +64,10 @@ export default function Home() {
   const [newIssueBody, setNewIssueBody] = useState('');
   const [creatingIssue, setCreatingIssue] = useState(false);
   const [pollingForNewIssue, setPollingForNewIssue] = useState(false);
+  const [showSessions, setShowSessions] = useState(false);
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [existingSession, setExistingSession] = useState<any>(null);
+  const [checkingSession, setCheckingSession] = useState(false);
 
   useEffect(() => {
     // Check if we have a GitHub token
@@ -70,6 +84,13 @@ export default function Home() {
       setHiddenRepos(new Set(JSON.parse(hidden)));
     }
   }, []);
+
+  // Load issues when repo is selected via URL
+  useEffect(() => {
+    if (selectedRepo && issues.length === 0) {
+      fetchIssues(selectedRepo);
+    }
+  }, [selectedRepoName]);
 
   const fetchUser = async (token: string) => {
     try {
@@ -137,7 +158,8 @@ export default function Home() {
         const issueData = await res.json();
         console.log('[fetchIssues] Got issues:', issueData.length);
         setIssues(issueData);
-        setSelectedRepo(repo);
+        // Update URL instead of state
+        router.push(`/?repo=${encodeURIComponent(repo.full_name)}`);
       } else {
         console.error('[fetchIssues] Response not OK:', res.status, res.statusText);
       }
@@ -160,7 +182,7 @@ export default function Home() {
     localStorage.removeItem('github_token');
     setUser(null);
     setRepos([]);
-    setSelectedRepo(null);
+    router.push('/');
     setIssues([]);
   };
 
@@ -173,6 +195,55 @@ export default function Home() {
     }
     setHiddenRepos(newHidden);
     localStorage.setItem('hidden_repos', JSON.stringify(Array.from(newHidden)));
+  };
+
+  const fetchSessions = async () => {
+    try {
+      const response = await fetch('/api/droplets/list');
+      if (response.ok) {
+        const data = await response.json();
+        setSessions(data.sessions || []);
+      }
+    } catch (error) {
+      console.error('[fetchSessions] Error:', error);
+    }
+  };
+
+  const checkForExistingSession = async (repoName: string, issueNumber: number) => {
+    setCheckingSession(true);
+    try {
+      const response = await fetch(`/api/droplets/find-session?repoName=${encodeURIComponent(repoName)}&issueNumber=${issueNumber}`);
+      if (response.ok) {
+        const data = await response.json();
+        setExistingSession(data.found ? data.session : null);
+      }
+    } catch (error) {
+      console.error('[checkForExistingSession] Error:', error);
+      setExistingSession(null);
+    } finally {
+      setCheckingSession(false);
+    }
+  };
+
+  const destroySession = async (sessionId: string) => {
+    if (!confirm('Are you sure you want to destroy this session?')) return;
+
+    try {
+      const response = await fetch('/api/droplets/destroy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+      });
+
+      if (response.ok) {
+        fetchSessions(); // Refresh the list
+      } else {
+        throw new Error('Failed to destroy session');
+      }
+    } catch (error) {
+      console.error('[destroySession] Error:', error);
+      alert(`Failed to destroy session: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const startSessionForIssue = async (issue: Issue, repo: Repo) => {
@@ -344,7 +415,14 @@ export default function Home() {
         <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
           {/* Back Button */}
           <button
-            onClick={() => setSelectedIssue(null)}
+            onClick={() => {
+              if (selectedRepo) {
+                router.push(`/?repo=${encodeURIComponent(selectedRepo.full_name)}`);
+              } else {
+                router.push('/');
+              }
+              setExistingSession(null);
+            }}
             className="card-yellow shadow-retro-lg p-3 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
           >
             <ChevronLeftIcon className="w-6 h-6" />
@@ -400,19 +478,45 @@ export default function Home() {
             </div>
           </a>
 
-          {/* Start Session Button */}
-          {!isProvisioning ? (
-            <button
-              onClick={() => selectedRepo && startSessionForIssue(selectedIssue, selectedRepo)}
-              className="w-full card-green shadow-retro-xl p-8 active:translate-x-4 active:translate-y-4 active:shadow-none transition-all"
-            >
-              <div className="flex flex-col items-center gap-4">
-                <ZapIcon className="w-16 h-16" />
-                <span className="text-4xl text-[rgb(var(--color-black))] leading-none font-black">
-                  START SESSION
+          {/* Session Button - Rejoin or Start */}
+          {checkingSession ? (
+            <div className="w-full card-white shadow-retro-xl p-8">
+              <div className="flex items-center justify-center gap-3">
+                <ReloadIcon className="w-8 h-8 animate-spin" />
+                <span className="text-2xl text-[rgb(var(--color-black))] font-black">
+                  CHECKING SESSION...
                 </span>
               </div>
-            </button>
+            </div>
+          ) : !isProvisioning ? (
+            existingSession ? (
+              <a
+                href={`/terminal/${existingSession.sessionId}?ip=${existingSession.ip}`}
+                className="w-full card-yellow shadow-retro-xl p-8 active:translate-x-4 active:translate-y-4 active:shadow-none transition-all block"
+              >
+                <div className="flex flex-col items-center gap-4">
+                  <TerminalIcon className="w-16 h-16" />
+                  <span className="text-4xl text-[rgb(var(--color-black))] leading-none font-black text-center">
+                    REJOIN SESSION
+                  </span>
+                  <span className="text-lg text-[rgb(var(--color-black))]/70 font-bold">
+                    Active session found!
+                  </span>
+                </div>
+              </a>
+            ) : (
+              <button
+                onClick={() => selectedRepo && startSessionForIssue(selectedIssue, selectedRepo)}
+                className="w-full card-green shadow-retro-xl p-8 active:translate-x-4 active:translate-y-4 active:shadow-none transition-all"
+              >
+                <div className="flex flex-col items-center gap-4">
+                  <ZapIcon className="w-16 h-16" />
+                  <span className="text-4xl text-[rgb(var(--color-black))] leading-none font-black">
+                    START SESSION
+                  </span>
+                </div>
+              </button>
+            )
           ) : (
             <div className="card-white shadow-retro-xl p-6">
               <div className="text-center mb-6">
@@ -464,7 +568,7 @@ export default function Home() {
           {/* Back Button */}
           <button
             onClick={() => {
-              setSelectedRepo(null);
+              router.push('/');
               setIssues([]);
             }}
             className="card-yellow shadow-retro-lg p-3 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
@@ -525,7 +629,12 @@ export default function Home() {
               issues.map((issue) => (
                 <button
                   key={issue.id}
-                  onClick={() => setSelectedIssue(issue)}
+                  onClick={() => {
+                    if (selectedRepo) {
+                      router.push(`/?repo=${encodeURIComponent(selectedRepo.full_name)}&issue=${issue.number}`);
+                      checkForExistingSession(selectedRepo.name, issue.number);
+                    }
+                  }}
                   className="w-full card-white shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all text-left"
                 >
                   <div className="flex items-center gap-3">
@@ -619,6 +728,100 @@ export default function Home() {
     );
   }
 
+  // Sessions view
+  if (showSessions) {
+    return (
+      <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
+        <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
+          {/* Back Button */}
+          <button
+            onClick={() => setShowSessions(false)}
+            className="card-yellow shadow-retro-lg p-3 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
+          >
+            <ChevronLeftIcon className="w-6 h-6" />
+          </button>
+
+          {/* Header */}
+          <div className="card-white shadow-retro-xl p-6 mb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <TerminalIcon className="w-8 h-8" />
+                <h1 className="text-3xl text-[rgb(var(--color-black))] font-black leading-tight">
+                  ACTIVE SESSIONS
+                </h1>
+              </div>
+              <button
+                onClick={fetchSessions}
+                className="p-2 active:translate-x-1 active:translate-y-1 transition-all"
+                title="Refresh"
+              >
+                <ReloadIcon className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Sessions List */}
+          <div className="space-y-4 pb-6">
+            {sessions.length === 0 ? (
+              <div className="card-white shadow-retro-xl p-12 text-center">
+                <p className="text-4xl text-[rgb(var(--color-black))] font-black">
+                  NO ACTIVE SESSIONS
+                </p>
+                <p className="text-2xl text-[rgb(var(--color-black))]/60 font-bold mt-4">
+                  Start a session from an issue!
+                </p>
+              </div>
+            ) : (
+              sessions.map((session) => (
+                <div key={session.sessionId} className="card-white shadow-retro-lg p-4">
+                  <div className="mb-3">
+                    <h3 className="text-xl text-[rgb(var(--color-black))] font-black mb-1">
+                      {session.repoName}
+                    </h3>
+                    {session.issueNumber && (
+                      <p className="text-lg text-[rgb(var(--color-black))]/70 font-bold">
+                        Issue #{session.issueNumber}
+                      </p>
+                    )}
+                    <p className="text-sm text-[rgb(var(--color-black))]/50 font-bold mt-1">
+                      {session.sessionId}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href={`/terminal/${session.sessionId}?ip=${session.ip}`}
+                      className="card-green shadow-retro p-3 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all block text-center"
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <TerminalIcon className="w-5 h-5" />
+                        <span className="text-lg text-[rgb(var(--color-black))] font-black">
+                          REJOIN
+                        </span>
+                      </div>
+                    </a>
+
+                    <button
+                      onClick={() => destroySession(session.sessionId)}
+                      className="card-red shadow-retro p-3 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <TrashIcon className="w-5 h-5" />
+                        <span className="text-lg text-[rgb(var(--color-black))] font-black">
+                          DESTROY
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Repos list view
   return (
     <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
@@ -643,18 +846,35 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Manage Repos Button */}
-        <button
-          onClick={() => setManageMode(!manageMode)}
-          className="card-white shadow-retro-lg p-4 mb-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
-        >
-          <div className="flex items-center justify-center gap-3">
-            {manageMode ? <CheckIcon className="w-6 h-6" /> : <SlidersIcon className="w-6 h-6" />}
-            <span className="text-2xl text-[rgb(var(--color-black))]">
-              {manageMode ? 'DONE' : 'MANAGE REPOS'}
-            </span>
-          </div>
-        </button>
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <button
+            onClick={() => setManageMode(!manageMode)}
+            className="card-white shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
+          >
+            <div className="flex items-center justify-center gap-3">
+              {manageMode ? <CheckIcon className="w-6 h-6" /> : <SlidersIcon className="w-6 h-6" />}
+              <span className="text-xl text-[rgb(var(--color-black))] font-black">
+                {manageMode ? 'DONE' : 'REPOS'}
+              </span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => {
+              setShowSessions(true);
+              fetchSessions();
+            }}
+            className="card-green shadow-retro-lg p-4 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <TerminalIcon className="w-6 h-6" />
+              <span className="text-xl text-[rgb(var(--color-black))] font-black">
+                SESSIONS
+              </span>
+            </div>
+          </button>
+        </div>
 
         {/* Repos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">

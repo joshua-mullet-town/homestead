@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
-import { ZoomIn, ZoomOut, MessageSquare } from 'lucide-react';
+import { ZoomIn, ZoomOut, MessageSquare, Home } from 'lucide-react';
 
 // Client-side logging helper
 function logClient(message: string, level = 'INFO') {
@@ -243,6 +243,16 @@ export default function TerminalPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {/* Home button */}
+          <button
+            onClick={() => router.push('/')}
+            className="px-3 py-1.5 bg-gray-800 text-white font-bold rounded hover:bg-[#FF6600] transition-colors text-sm flex items-center gap-1"
+            title="Back to Home"
+          >
+            <Home size={14} />
+            HOME
+          </button>
+
           {/* Chat View button */}
           <button
             onClick={() => router.push(`/chat/${sessionId}?ip=${dropletIp || 'localhost'}`)}
