@@ -408,7 +408,18 @@ export default function Home() {
   }
 
   // Issue detail view
-  if (selectedIssue) {
+  // Show issue detail if we have the issue, OR if URL says we should (while loading)
+  if (selectedIssue || (selectedIssueNumber && selectedRepo)) {
+    // If URL has issue number but we don't have the issue yet, show loading
+    if (!selectedIssue) {
+      return (
+        <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] flex items-center justify-center">
+          <div className="card-white shadow-retro-xl p-8">
+            <div className="text-3xl font-black text-center">Loading issue...</div>
+          </div>
+        </div>
+      );
+    }
     console.log('[Issue Detail] selectedIssue:', selectedIssue);
     console.log('[Issue Detail] body:', selectedIssue.body);
     console.log('[Issue Detail] body type:', typeof selectedIssue.body);
@@ -565,7 +576,18 @@ export default function Home() {
   }
 
   // Issues list view
-  if (selectedRepo) {
+  // Show issues list if we have the repo, OR if URL says we should (while loading)
+  if (selectedRepo || (selectedRepoName && !selectedIssueNumber)) {
+    // If URL has repo but we don't have it yet, show loading
+    if (!selectedRepo) {
+      return (
+        <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] flex items-center justify-center">
+          <div className="card-white shadow-retro-xl p-8">
+            <div className="text-3xl font-black text-center">Loading repo...</div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
         <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
