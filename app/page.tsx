@@ -162,8 +162,11 @@ export default function Home() {
         const issueData = await res.json();
         console.log('[fetchIssues] Got issues:', issueData.length);
         setIssues(issueData);
-        // Update URL instead of state
-        router.push(`/?repo=${encodeURIComponent(repo.full_name)}`);
+        // Only update URL if we're not already on a repo page (i.e., user clicked from home)
+        // Don't overwrite URL if we're loading issues from existing URL params
+        if (!selectedRepoName) {
+          router.push(`/?repo=${encodeURIComponent(repo.full_name)}`);
+        }
       } else {
         console.error('[fetchIssues] Response not OK:', res.status, res.statusText);
       }
