@@ -87,10 +87,14 @@ export default function Home() {
 
   // Load issues when repo is selected via URL
   useEffect(() => {
-    if (selectedRepo && issues.length === 0) {
-      fetchIssues(selectedRepo);
+    // Wait for repos to load
+    if (!selectedRepoName || repos.length === 0) return;
+
+    const repo = repos.find(r => r.full_name === selectedRepoName);
+    if (repo && issues.length === 0) {
+      fetchIssues(repo);
     }
-  }, [selectedRepoName]);
+  }, [selectedRepoName, repos.length]);
 
   const fetchUser = async (token: string) => {
     try {
