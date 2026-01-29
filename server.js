@@ -180,8 +180,8 @@ app.prepare().then(() => {
               log(`[Socket] Executing auto-start: clear`);
               terminal.ptyProcess.write('clear\n');
               setTimeout(() => {
-                log(`[Socket] Executing auto-start: claude --dangerously-skip-permissions`);
-                terminal.ptyProcess.write('claude --dangerously-skip-permissions\n');
+                log(`[Socket] Executing auto-start: IS_SANDBOX=1 claude --dangerously-skip-permissions`);
+                terminal.ptyProcess.write('IS_SANDBOX=1 claude --dangerously-skip-permissions\n');
               }, 100);
             }, 100);
           } else {
