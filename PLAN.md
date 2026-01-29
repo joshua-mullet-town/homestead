@@ -2,71 +2,54 @@
 
 ## 🎯 CURRENT PRIORITIES
 
-### 1. Skip Claude Code Text Style Prompt
-**Problem:** When Claude Code starts, it asks user to choose a text style (conversational/concise/code). This is annoying and delays getting to work.
+### ✅ COMPLETED PRIORITIES
 
-**Goal:** Auto-configure Claude Code to skip this prompt and use a default style.
+1. **Skip Claude Code Text Style Prompt** - DONE
+   - Added `"outputStyle": "Default"` to `~/.claude/settings.json` in cloud-init
+   - Claude Code starts immediately without prompts
 
-**Questions:**
-- Is there a Claude Code setting we can pre-configure to skip this?
-- Can we pass a flag like `--style=concise`?
-- Is there a config file (`~/.claude/settings.json`) that controls this?
+2. **Fix "Disconnected" State on Terminal Load** - DONE
+   - Created detailed provisioning status screen
+   - Polls droplet every 3 seconds showing 4 steps
+   - **BONUS:** Added live provision.log streaming via SSH!
+   - Shows real-time cloud-init progress (Node.js install, npm install, etc.)
+   - Only navigates to terminal once everything is ready
 
-**Research needed:** Check Claude Code docs for text style configuration options.
-
----
-
-### 2. Fix "Disconnected" State on Terminal Load
-**Problem:** When user first opens terminal page, it shows "disconnected" status for 30+ seconds. User just stares at black screen. Bad UX.
-
-**Goal:** Either connect faster OR show a better loading state with progress indicator.
-
-**Possible causes:**
-- Socket.IO connection takes time to establish?
-- Cloud-init still running when user opens page?
-- Frontend trying to connect before backend is ready?
-- Race condition in terminal initialization?
-
-**Investigation steps:**
-1. Check if PM2 homestead process is already running when page loads
-2. Add logging to see how long Socket.IO connection takes
-3. Check if droplet is fully provisioned before showing terminal UI
-4. Consider adding "Provisioning... (X% complete)" indicator
-
-**UI improvements:**
-- Show "Provisioning droplet..." with spinner
-- Show "Connecting to terminal..." once port 3005 is open
-- Only show "disconnected" if connection actually fails
+3. **Add "Restart Dev Server" Button** - DONE
+   - Added orange RESTART button to terminal UI
+   - Sends PM2 restart command through Socket.IO
+   - Shows spinning icon while restarting
 
 ---
 
-### 3. Add "Restart Dev Server" Button
-**Problem:** Dev server (Next.js on port 7087) sometimes crashes. User has no way to restart it without SSH access.
+## 🎯 NEXT PRIORITIES
 
-**Goal:** Add a button in the UI to restart the dev server via PM2.
+### 1. Polish Provisioning Status Screen
+**Ideas for improvement:**
+- Color-code log lines (errors in red, success in green)
+- Parse log timestamps and show "step took X seconds"
+- Add progress bar (estimate based on typical timing)
+- Show "Installing dependencies... (this usually takes 60s)" context
 
-**Implementation:**
-1. **API Endpoint:** `POST /api/droplets/restart-dev-server`
-   - Takes `sessionId` or `dropletId`
-   - SSHs into droplet (or uses terminal command)
-   - Runs: `export HOME=/root && pm2 restart dev-server`
-   - Returns success/failure status
+---
 
-2. **UI Button:** Add to terminal page (next to preview toggle?)
-   - Shows current dev server status (running/stopped/error)
-   - Button: "Restart Dev Server"
-   - Shows loading state while restarting
-   - Shows success/failure toast
+### 2. Handle Provisioning Failures Better
+**Problem:** If cloud-init fails, user just sees "Taking longer than expected"
 
-3. **Status Checking:** Optionally poll dev server status
-   - Check if port 7087 is responding
-   - Show "Dev server crashed" warning if down
-   - Auto-suggest restart button
+**Improvements:**
+- Detect common errors (SSH key, npm install failure, port already in use)
+- Show specific error messages with suggested fixes
+- Add "View Full Log" button to see complete provision.log
+- Add "Retry Provisioning" button
 
-**Questions:**
-- Should we auto-restart dev server if it crashes?
-- Should we show dev server logs in UI?
-- Should restart button be in preview iframe or terminal page?
+---
+
+### 3. Session Management Improvements
+**Ideas:**
+- Show all active sessions on homepage with status
+- Add "Stop Session" button (destroys droplet, saves money)
+- Show cost estimate ("This session has cost $0.05 so far")
+- Auto-shutdown after X minutes of inactivity
 
 ---
 

@@ -1,5 +1,40 @@
 # STATE.md - What We Know
 
+## [2026-01-29 20:00] 🎉 LIVE PROVISION LOG STREAMING + SSH FIX!
+
+**MAJOR UX IMPROVEMENT:** Users now see EXACTLY what's happening during provisioning!
+
+**What We Fixed:**
+1. ✅ SSH config for automatic key selection (no more Permission denied)
+2. ✅ Live provision.log streaming via SSH
+3. ✅ Real-time cloud-init progress on status screen
+4. ✅ No more guessing - watch Node.js install, npm install, PM2 start, etc.
+
+**How It Works:**
+- Status API reads `/root/provision.log` every 3 seconds via SSH
+- Shows last 15 lines in green terminal-style display
+- Updates automatically as cloud-init progresses
+- See timestamps, commands, and actual installation progress
+
+**SSH Config Added:**
+```
+Host 138.197.* 159.89.* 165.227.* 167.172.* 174.138.* ...
+  User root
+  IdentityFile ~/.ssh/homestead_droplet
+  IdentitiesOnly yes
+```
+
+**Example Log Lines User Sees:**
+```
+[2026-01-29T19:35:37] Installing Node.js v20...
+[2026-01-29T19:36:15] Node.js installed: v20.11.0
+[2026-01-29T19:36:30] Installing PM2 and Claude Code...
+[2026-01-29T19:37:00] Cloning user repo: crowne-vault
+[2026-01-29T19:37:43] Homestead provisioning complete!
+```
+
+---
+
 ## [2026-01-29 17:30] 🎉 END-TO-END AUTOMATION WORKING!
 
 **COMPLETE SUCCESS:** Claude Code auto-starts on droplet and is ready to use!
