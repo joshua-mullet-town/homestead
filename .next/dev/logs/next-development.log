@@ -719,3 +719,103 @@
 [05:40:58.984] Browser LOG     [2026-01-29T19:32:38.309Z] [CLIENT] [INFO] Terminal mounted successfully
 [05:40:58.984] Browser LOG     [2026-01-29T19:32:38.310Z] [CLIENT] [INFO] Socket.IO connecting to: http://64.225.8.199:3005 (droplet)
 [05:40:58.984] Browser LOG     [2026-01-29T19:32:38.311Z] [CLIENT] [INFO] Socket.IO client created
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.113Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.119Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.121Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.113Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.119Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:41:19.982] Browser LOG     [2026-01-29T19:32:59.120Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.112Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.116Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.118Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.112Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.118Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:41:41.983] Browser LOG     [2026-01-29T19:33:21.118Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:42:04.982] Browser LOG     [2026-01-29T19:33:44.112Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:42:05.982] Browser LOG     [2026-01-29T19:33:45.112Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:42:09.643] Browser LOG     [2026-01-29T19:33:49.114Z] [CLIENT] [WARN] Socket.IO disconnected
+[05:42:09.643] Browser LOG     [2026-01-29T19:33:49.119Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769713435770, dropletIp: 138.197.84.118, previewPort: 7087
+[05:42:09.643] Browser LOG     [2026-01-29T19:33:49.120Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769713435770, dropletIp: 138.197.84.118, previewPort: 7087
+[05:42:14.341] Browser LOG     [2026-01-29T19:33:54.371Z] [CLIENT] [INFO] Component unmounting
+[05:42:19.131] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.266Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.267Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.273Z] [CLIENT] [INFO] Initializing terminal...
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.273Z] [CLIENT] [INFO] Importing xterm modules...
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.295Z] [CLIENT] [INFO] xterm modules imported successfully
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.295Z] [CLIENT] [INFO] Creating terminal instance...
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.297Z] [CLIENT] [INFO] Mounting terminal to DOM...
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.304Z] [CLIENT] [INFO] Terminal mounted successfully
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.304Z] [CLIENT] [INFO] Socket.IO connecting to: http://138.197.116.10:3005 (droplet)
+[05:42:19.276] Browser LOG     [2026-01-29T19:33:59.305Z] [CLIENT] [INFO] Socket.IO client created
+[05:42:24.196] Browser LOG     [2026-01-29T19:34:04.224Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:24.196] Browser LOG     [2026-01-29T19:34:04.225Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:27.629] Browser LOG     [2026-01-29T19:34:07.657Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:27.629] Browser LOG     [2026-01-29T19:34:07.658Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:40.982] Browser LOG     [2026-01-29T19:34:20.114Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:42:40.982] Browser LOG     [2026-01-29T19:34:20.116Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:42:40.982] Browser LOG     [2026-01-29T19:34:20.117Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:01.248] Browser LOG     [2026-01-29T19:34:41.274Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:43:01.248] Browser LOG     [2026-01-29T19:34:41.276Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:01.248] Browser LOG     [2026-01-29T19:34:41.277Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:10.924] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:43:21.764] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:43:21.764] Browser LOG     [2026-01-29T19:35:01.882Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:21.764] Browser LOG     [2026-01-29T19:35:01.883Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.886Z] [CLIENT] [INFO] Initializing terminal...
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.886Z] [CLIENT] [INFO] Importing xterm modules...
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.918Z] [CLIENT] [INFO] xterm modules imported successfully
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.918Z] [CLIENT] [INFO] Creating terminal instance...
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.920Z] [CLIENT] [INFO] Mounting terminal to DOM...
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.927Z] [CLIENT] [INFO] Terminal mounted successfully
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.928Z] [CLIENT] [INFO] Socket.IO connecting to: http://138.197.116.10:3005 (droplet)
+[05:43:21.898] Browser LOG     [2026-01-29T19:35:01.929Z] [CLIENT] [INFO] Socket.IO client created
+[05:43:26.984] Browser LOG     [2026-01-29T19:35:06.124Z] [CLIENT] [ERROR] Socket.IO connect_error: websocket error
+[05:43:26.985] Browser LOG     [2026-01-29T19:35:06.128Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:43:26.985] Browser LOG     [2026-01-29T19:35:06.129Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:43:30.981] Browser LOG     [2026-01-29T19:34:11.134Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:43:40.427] Browser LOG     [2026-01-29T19:35:20.456Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:40.427] Browser LOG     [2026-01-29T19:35:20.457Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:41.901] Browser LOG     [2026-01-29T19:35:21.930Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:43:41.901] Browser LOG     [2026-01-29T19:35:21.931Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:41.901] Browser LOG     [2026-01-29T19:35:21.932Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:43:53.989] Browser LOG     [2026-01-29T19:35:33.113Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:43:53.989] Browser LOG     [2026-01-29T19:35:33.118Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:43:53.989] Browser LOG     [2026-01-29T19:35:33.119Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:44:04.983] Browser LOG     [2026-01-29T19:35:44.114Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:44:04.983] Browser LOG     [2026-01-29T19:35:44.116Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:44:04.983] Browser LOG     [2026-01-29T19:35:44.117Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:44:20.982] Browser LOG     [2026-01-29T19:36:00.114Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:44:20.982] Browser LOG     [2026-01-29T19:36:00.118Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:44:20.982] Browser LOG     [2026-01-29T19:36:00.119Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:44:27.982] Browser LOG     [2026-01-29T19:36:07.115Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:44:54.982] Browser LOG     [2026-01-29T19:36:34.113Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:45:30.992] Browser LOG     [2026-01-29T19:36:11.117Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:45:30.993] Browser LOG     [2026-01-29T19:36:27.114Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:46:06.982] Browser LOG     [2026-01-29T19:37:46.304Z] [CLIENT] [INFO] Socket.IO connected successfully
+[05:46:06.982] Browser LOG     [2026-01-29T19:37:46.307Z] [CLIENT] [INFO] Emitting terminal:create event for session: crowne-vault-1769715188545
+[05:46:06.982] Browser LOG     [2026-01-29T19:37:46.311Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:46:06.982] Browser LOG     [2026-01-29T19:37:46.312Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:46:06.982] Browser LOG     [2026-01-29T19:37:46.371Z] [CLIENT] [INFO] Terminal ready event received for session: crowne-vault-1769715188545
+[05:47:30.991] Browser LOG     [2026-01-29T19:38:11.128Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:47:30.991] Browser LOG     [2026-01-29T19:38:11.127Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:48:01.631] Browser LOG     [2026-01-29T19:39:41.661Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:48:01.632] Browser LOG     [2026-01-29T19:39:41.663Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:48:04.867] Browser LOG     [2026-01-29T19:39:44.896Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:48:04.868] Browser LOG     [2026-01-29T19:39:44.897Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:49:30.988] Browser LOG     [2026-01-29T19:40:11.130Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:49:30.992] Browser LOG     [2026-01-29T19:40:11.132Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.714Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.715Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.726Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.727Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.733Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:41.734Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[05:50:02.982] Browser LOG     [2026-01-29T19:41:42.120Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[05:50:02.985] Browser LOG     [2026-01-29T19:41:42.542Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:50:02.985] Browser LOG     [2026-01-29T19:41:42.543Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769715188545, dropletIp: 138.197.116.10, previewPort: 7087
+[05:50:03.982] Browser LOG     [2026-01-29T19:41:42.542Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:50:03.982] Browser LOG     [2026-01-29T19:41:42.542Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:50:03.982] Browser LOG     [2026-01-29T19:41:42.548Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:50:03.982] Browser LOG     [2026-01-29T19:41:42.549Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[05:50:03.982] Browser LOG     [2026-01-29T19:41:43.117Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout

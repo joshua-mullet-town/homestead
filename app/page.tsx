@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import ProvisioningStatus from './components/ProvisioningStatus';
 
 // Simple icon components with default sizing
 const HomeIcon = ({ className = "w-6 h-6", ...props }: any) => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className} {...props}><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>;
@@ -68,6 +69,8 @@ export default function Home() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [existingSession, setExistingSession] = useState<any>(null);
   const [checkingSession, setCheckingSession] = useState(false);
+  const [provisioningSessionId, setProvisioningSessionId] = useState<string | null>(null);
+  const [provisioningIp, setProvisioningIp] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if we have a GitHub token
@@ -278,8 +281,9 @@ export default function Home() {
       const result = await response.json();
       console.log('[startSessionForIssue] Droplet created:', result);
 
-      // Redirect to terminal
-      window.location.href = `/terminal/${result.sessionId}?ip=${result.ip}`;
+      // Show provisioning status instead of immediate redirect
+      setProvisioningSessionId(result.sessionId);
+      setProvisioningIp(result.ip);
     } catch (error) {
       console.error('[startSessionForIssue] Error:', error);
       alert(`Failed to start session: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -852,6 +856,19 @@ export default function Home() {
   }
 
   // Repos list view
+  // Show provisioning status screen if we're waiting for droplet
+  if (provisioningSessionId && provisioningIp) {
+    return (
+      <ProvisioningStatus
+        sessionId={provisioningSessionId}
+        onReady={() => {
+          // Navigate to terminal once ready
+          window.location.href = `/terminal/${provisioningSessionId}?ip=${provisioningIp}`;
+        }}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 w-screen h-screen bg-[rgb(var(--color-orange))] overflow-y-auto">
       <div className="min-h-full flex flex-col p-6 safe-area-inset max-w-4xl mx-auto">
