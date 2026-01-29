@@ -1,6 +1,6 @@
 ```json
 {
-  "user_summary": "Summarize coding session in minimal words",
-  "agent_summary": "Documented Path A victories, automation roadmap, Claude Code authentication"
+  "user_summary": "Fix automation—actually test droplet creation end-to-end",
+  "agent_summary": "Started debugging secrets injection; needs DigitalOcean API token"
 }
 ```

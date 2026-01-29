@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync, appendFileSync } from 'fs';
 import { join } from 'path';
 import { saveSession } from '@/lib/sessions';
+import { loadProjectSecrets, getSecretsInfo } from '@/lib/secrets';
 
 const DO_API_TOKEN = process.env.DO_API_TOKEN;
 const SSH_KEY_ID = '53651428';
@@ -119,15 +120,29 @@ function loadCloudInitTemplate(variables: {
   branchName: string;
   apiKey: string;
   githubPat: string;
+  projectEnvLocal?: string;
+  projectEnvDevelopment?: string;
+  serviceAccountJsonBase64?: string;
 }): string {
   const templatePath = join(process.cwd(), 'cloud-init.yaml');
   const template = readFileSync(templatePath, 'utf-8');
+
+  // Base64 encode env files to avoid YAML parsing issues
+  const envLocalB64 = variables.projectEnvLocal
+    ? Buffer.from(variables.projectEnvLocal).toString('base64')
+    : '';
+  const envDevB64 = variables.projectEnvDevelopment
+    ? Buffer.from(variables.projectEnvDevelopment).toString('base64')
+    : '';
 
   return template
     .replace(/\{\{REPO_PATH\}\}/g, variables.repoPath)
     .replace(/\{\{BRANCH_NAME\}\}/g, variables.branchName)
     .replace(/\{\{ANTHROPIC_API_KEY\}\}/g, variables.apiKey)
-    .replace(/\{\{GITHUB_PAT\}\}/g, variables.githubPat);
+    .replace(/\{\{GITHUB_PAT\}\}/g, variables.githubPat)
+    .replace(/\{\{PROJECT_ENV_LOCAL_B64\}\}/g, envLocalB64)
+    .replace(/\{\{PROJECT_ENV_DEVELOPMENT_B64\}\}/g, envDevB64)
+    .replace(/\{\{SERVICE_ACCOUNT_JSON_B64\}\}/g, variables.serviceAccountJsonBase64 || '');
 }
 
 export async function POST(request: NextRequest) {
@@ -174,6 +189,12 @@ export async function POST(request: NextRequest) {
     const sessionId = `${repoName}-${Date.now()}`;
     logAPI(`Generated branch: ${branch}, sessionId: ${sessionId}`);
 
+    // Load project-specific secrets
+    logAPI(`Loading secrets for project: ${repoName}`);
+    const secrets = loadProjectSecrets(repoName);
+    const secretsInfo = getSecretsInfo(repoName);
+    logAPI(`Secrets loaded: ${secretsInfo}`);
+
     // Load and populate cloud-init template
     logAPI('Loading cloud-init template...');
     const cloudInit = loadCloudInitTemplate({
@@ -181,6 +202,9 @@ export async function POST(request: NextRequest) {
       branchName: branch,
       apiKey: ANTHROPIC_API_KEY!,
       githubPat: GITHUB_PAT!,
+      projectEnvLocal: secrets.envLocal,
+      projectEnvDevelopment: secrets.envDevelopment,
+      serviceAccountJsonBase64: secrets.serviceAccountJsonBase64,
     });
     logAPI('Cloud-init template loaded and variables substituted');
 

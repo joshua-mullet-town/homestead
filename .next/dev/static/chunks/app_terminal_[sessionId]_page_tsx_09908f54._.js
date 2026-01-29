@@ -12,6 +12,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$socket$2e$io$2d$client$2f$build$2f$esm$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/socket.io-client/build/esm/index.js [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zoom$2d$in$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ZoomIn$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zoom-in.js [app-client] (ecmascript) <export default as ZoomIn>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zoom$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ZoomOut$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zoom-out.js [app-client] (ecmascript) <export default as ZoomOut>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/message-square.js [app-client] (ecmascript) <export default as MessageSquare>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/house.js [app-client] (ecmascript) <export default as Home>");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
@@ -19,10 +21,21 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+// Client-side logging helper
+function logClient(message, level = 'INFO') {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] [CLIENT] [${level}] ${message}`;
+    console.log(logMessage);
+}
 function TerminalPage() {
     _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
+    const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"])();
     const sessionId = params.sessionId;
+    const dropletIp = searchParams.get('ip');
+    const previewPort = searchParams.get('port') || '7087'; // Default to 7087 (crowne-vault), override with ?port=XXXX
     const terminalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const xtermRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const fitAddonRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
@@ -31,6 +44,7 @@ function TerminalPage() {
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [fontSize, setFontSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(14);
     const [showPreview, setShowPreview] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    logClient(`Terminal page loaded - sessionId: ${sessionId}, dropletIp: ${dropletIp}, previewPort: ${previewPort}`);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "TerminalPage.useEffect": ()=>{
             let xterm;
@@ -39,13 +53,20 @@ function TerminalPage() {
             const initTerminal = {
                 "TerminalPage.useEffect.initTerminal": async ()=>{
                     try {
+                        logClient('Initializing terminal...');
                         // Dynamically import xterm to avoid SSR issues
+                        logClient('Importing xterm modules...');
                         const [{ Terminal }, { FitAddon }] = await Promise.all([
                             __turbopack_context__.A("[project]/node_modules/@xterm/xterm/lib/xterm.mjs [app-client] (ecmascript, async loader)"),
                             __turbopack_context__.A("[project]/node_modules/@xterm/addon-fit/lib/addon-fit.mjs [app-client] (ecmascript, async loader)")
                         ]);
-                        if (!mounted) return;
+                        logClient('xterm modules imported successfully');
+                        if (!mounted) {
+                            logClient('Component unmounted, aborting terminal init', 'WARN');
+                            return;
+                        }
                         // Create terminal instance
+                        logClient('Creating terminal instance...');
                         xterm = new Terminal({
                             cols: 100,
                             rows: 30,
@@ -65,17 +86,20 @@ function TerminalPage() {
                         fitAddonRef.current = fitAddon;
                         // Mount terminal
                         if (terminalRef.current) {
+                            logClient('Mounting terminal to DOM...');
                             xterm.open(terminalRef.current);
                             fitAddon.fit();
                             xtermRef.current = xterm;
+                            logClient('Terminal mounted successfully');
+                        } else {
+                            logClient('Terminal ref is null, cannot mount', 'ERROR');
                         }
-                        // Connect to Socket.IO - use current URL (for cloudflare tunnel) or local with port
-                        const isCloudflare = ("TURBOPACK compile-time value", "object") !== 'undefined' && window.location.hostname.includes('trycloudflare.com');
+                        // Connect to Socket.IO - use droplet IP if provided, otherwise local
                         const protocol = ("TURBOPACK compile-time value", "object") !== 'undefined' && window.location.protocol === 'https:' ? 'https' : 'http';
-                        const socketUrl = isCloudflare ? `${protocol}://${window.location.host}` // Use same host for cloudflare (no port)
+                        const socketUrl = dropletIp ? `http://${dropletIp}:3005` // Connect to droplet
                          : ("TURBOPACK compile-time truthy", 1) ? `${protocol}://${window.location.hostname}:3005` // Local with explicit port
                          : "TURBOPACK unreachable";
-                        console.log('[Socket] Connecting to:', socketUrl);
+                        logClient(`Socket.IO connecting to: ${socketUrl} (${dropletIp ? 'droplet' : 'local'})`);
                         const socket = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$socket$2e$io$2d$client$2f$build$2f$esm$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["io"])(socketUrl, {
                             transports: [
                                 'websocket',
@@ -84,43 +108,54 @@ function TerminalPage() {
                             path: '/socket.io' // Explicit path
                         });
                         socketRef.current = socket;
+                        logClient('Socket.IO client created');
                         socket.on('connect', {
                             "TerminalPage.useEffect.initTerminal": ()=>{
-                                console.log('[Socket] Connected');
+                                logClient('Socket.IO connected successfully');
                                 setIsConnected(true);
                                 setError(null);
                                 // Create terminal session (server will default to HOME directory)
+                                logClient(`Emitting terminal:create event for session: ${sessionId}`);
                                 socket.emit('terminal:create', sessionId);
                             }
                         }["TerminalPage.useEffect.initTerminal"]);
                         socket.on('disconnect', {
                             "TerminalPage.useEffect.initTerminal": ()=>{
-                                console.log('[Socket] Disconnected');
+                                logClient('Socket.IO disconnected', 'WARN');
                                 setIsConnected(false);
+                            }
+                        }["TerminalPage.useEffect.initTerminal"]);
+                        socket.on('connect_error', {
+                            "TerminalPage.useEffect.initTerminal": (err)=>{
+                                logClient(`Socket.IO connect_error: ${err.message}`, 'ERROR');
+                                setError(`Connection error: ${err.message}`);
                             }
                         }["TerminalPage.useEffect.initTerminal"]);
                         socket.on('terminal:ready', {
                             "TerminalPage.useEffect.initTerminal": (sid)=>{
-                                console.log('[Terminal] Ready:', sid);
+                                logClient(`Terminal ready event received for session: ${sid}`);
                                 xterm.write('\r\n\x1b[1;32mTerminal connected!\x1b[0m\r\n');
                             }
                         }["TerminalPage.useEffect.initTerminal"]);
                         socket.on('terminal:output', {
                             "TerminalPage.useEffect.initTerminal": (sid, data)=>{
                                 if (sid === sessionId) {
+                                    // Don't log every output - too spammy
                                     xterm.write(data);
+                                } else {
+                                    logClient(`Received output for wrong session: ${sid} (expected: ${sessionId})`, 'WARN');
                                 }
                             }
                         }["TerminalPage.useEffect.initTerminal"]);
                         socket.on('terminal:exit', {
                             "TerminalPage.useEffect.initTerminal": (sid, { exitCode })=>{
-                                console.log(`[Terminal] Exited with code ${exitCode}`);
+                                logClient(`Terminal process exited with code ${exitCode} for session: ${sid}`, 'WARN');
                                 xterm.write(`\r\n\r\n\x1b[1;31mProcess exited with code ${exitCode}\x1b[0m\r\n`);
                             }
                         }["TerminalPage.useEffect.initTerminal"]);
                         socket.on('terminal:error', {
                             "TerminalPage.useEffect.initTerminal": (sid, message)=>{
-                                console.error('[Terminal] Error:', message);
+                                logClient(`Terminal error for session ${sid}: ${message}`, 'ERROR');
                                 setError(message);
                                 xterm.write(`\r\n\x1b[1;31mError: ${message}\x1b[0m\r\n`);
                             }
@@ -148,18 +183,25 @@ function TerminalPage() {
                         window.addEventListener('resize', handleResize);
                         return ({
                             "TerminalPage.useEffect.initTerminal": ()=>{
+                                logClient('Cleaning up terminal...');
                                 window.removeEventListener('resize', handleResize);
                                 if (socket) {
+                                    logClient(`Emitting terminal:kill for session: ${sessionId}`);
                                     socket.emit('terminal:kill', sessionId);
                                     socket.disconnect();
+                                    logClient('Socket.IO disconnected');
                                 }
                                 if (xterm) {
                                     xterm.dispose();
+                                    logClient('Terminal disposed');
                                 }
                             }
                         })["TerminalPage.useEffect.initTerminal"];
                     } catch (err) {
-                        console.error('[Terminal] Init error:', err);
+                        logClient(`Terminal init error: ${err instanceof Error ? err.message : String(err)}`, 'ERROR');
+                        if (err instanceof Error) {
+                            logClient(`Error stack: ${err.stack}`, 'ERROR');
+                        }
                         setError(err instanceof Error ? err.message : 'Failed to initialize terminal');
                     }
                 }
@@ -167,6 +209,7 @@ function TerminalPage() {
             initTerminal();
             return ({
                 "TerminalPage.useEffect": ()=>{
+                    logClient('Component unmounting');
                     mounted = false;
                 }
             })["TerminalPage.useEffect"];
@@ -237,7 +280,7 @@ function TerminalPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 193,
+                                lineNumber: 235,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -247,7 +290,7 @@ function TerminalPage() {
                                         className: `w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 197,
+                                        lineNumber: 239,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -255,31 +298,69 @@ function TerminalPage() {
                                         children: isConnected ? 'Connected' : 'Disconnected'
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 198,
+                                        lineNumber: 240,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 196,
+                                lineNumber: 238,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 192,
+                        lineNumber: 234,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center gap-3",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push('/'),
+                                className: "px-3 py-1.5 bg-gray-800 text-white font-bold rounded hover:bg-[#FF6600] transition-colors text-sm flex items-center gap-1",
+                                title: "Back to Home",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"], {
+                                        size: 14
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                        lineNumber: 252,
+                                        columnNumber: 13
+                                    }, this),
+                                    "HOME"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 247,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push(`/chat/${sessionId}?ip=${dropletIp || 'localhost'}`),
+                                className: "px-3 py-1.5 bg-[#FFCC00] text-black font-bold rounded hover:bg-[#00FF66] transition-colors text-sm flex items-center gap-1",
+                                title: "Switch to Chat View",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__["MessageSquare"], {
+                                        size: 14
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                        lineNumber: 262,
+                                        columnNumber: 13
+                                    }, this),
+                                    "CHAT"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 257,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>setShowPreview(!showPreview),
                                 className: "px-3 py-1.5 bg-[#00FF66] text-black font-bold rounded hover:bg-[#FFCC00] transition-colors text-sm",
                                 children: showPreview ? 'TERMINAL' : 'PREVIEW'
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 205,
+                                lineNumber: 267,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -290,12 +371,12 @@ function TerminalPage() {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                    lineNumber: 218,
+                                    lineNumber: 280,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 213,
+                                lineNumber: 275,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -303,7 +384,7 @@ function TerminalPage() {
                                 children: fontSize
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 220,
+                                lineNumber: 282,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -314,12 +395,12 @@ function TerminalPage() {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                    lineNumber: 226,
+                                    lineNumber: 288,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 221,
+                                lineNumber: 283,
                                 columnNumber: 11
                             }, this),
                             error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -330,19 +411,19 @@ function TerminalPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 229,
+                                lineNumber: 291,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 203,
+                        lineNumber: 245,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 191,
+                lineNumber: 233,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -354,35 +435,78 @@ function TerminalPage() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 235,
+                lineNumber: 297,
                 columnNumber: 7
             }, this),
-            showPreview && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex-1 relative bg-white",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
-                    src: "http://localhost:3001",
+                style: {
+                    display: showPreview ? 'block' : 'none'
+                },
+                children: dropletIp ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
+                    src: `http://${dropletIp}:${previewPort}`,
                     className: "absolute inset-0 w-full h-full border-0 bg-white",
                     title: "App Preview"
                 }, void 0, false, {
                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                    lineNumber: 247,
+                    lineNumber: 309,
+                    columnNumber: 11
+                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "absolute inset-0 flex items-center justify-center",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "text-center text-gray-500",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-xl font-bold mb-2",
+                                children: "No Preview Available"
+                            }, void 0, false, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 317,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                children: "No droplet IP provided"
+                            }, void 0, false, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 318,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm mt-4",
+                                children: "Add ?port=XXXX to URL to specify port (default: 3000)"
+                            }, void 0, false, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 319,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                        lineNumber: 316,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                    lineNumber: 315,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 246,
-                columnNumber: 9
+                lineNumber: 307,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-        lineNumber: 189,
+        lineNumber: 231,
         columnNumber: 5
     }, this);
 }
-_s(TerminalPage, "jCWJUOvy9R3fRAUAUwsnVlSmt3s=", false, function() {
+_s(TerminalPage, "t2SDM9bTQeiCbfTn8UGYE7+S+Ck=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"]
     ];
 });
 _c = TerminalPage;

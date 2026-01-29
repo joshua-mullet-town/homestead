@@ -45,6 +45,12 @@ runcmd:
   - echo "[$(date -Iseconds)] Installing project dependencies..." | tee -a /root/provision.log
   - cd /root/project && npm install 2>&1 | tee -a /root/provision.log
 
+  # Create project-specific environment files (if provided) - using base64 to avoid YAML parsing issues
+  - echo "[$(date -Iseconds)] Setting up project environment files..." | tee -a /root/provision.log
+  - 'if [ -n "{{PROJECT_ENV_LOCAL_B64}}" ]; then echo "[$(date -Iseconds)] Creating .env.local file..." | tee -a /root/provision.log && echo "{{PROJECT_ENV_LOCAL_B64}}" | base64 -d > /root/project/.env.local && echo "[$(date -Iseconds)] .env.local created successfully" | tee -a /root/provision.log; else echo "[$(date -Iseconds)] No .env.local provided, skipping" | tee -a /root/provision.log; fi'
+  - 'if [ -n "{{SERVICE_ACCOUNT_JSON_B64}}" ]; then echo "[$(date -Iseconds)] Creating service-account-dev.json file..." | tee -a /root/provision.log && echo "{{SERVICE_ACCOUNT_JSON_B64}}" | base64 -d > /root/project/service-account-dev.json && echo "[$(date -Iseconds)] service-account-dev.json created successfully" | tee -a /root/provision.log; else echo "[$(date -Iseconds)] No service account JSON provided, skipping" | tee -a /root/provision.log; fi'
+  - 'if [ -n "{{PROJECT_ENV_DEVELOPMENT_B64}}" ]; then echo "[$(date -Iseconds)] Creating .env.development file..." | tee -a /root/provision.log && echo "{{PROJECT_ENV_DEVELOPMENT_B64}}" | base64 -d > /root/project/.env.development && echo "[$(date -Iseconds)] .env.development created successfully" | tee -a /root/provision.log; else echo "[$(date -Iseconds)] No .env.development provided, skipping" | tee -a /root/provision.log; fi'
+
   # Set environment variables
   - echo "[$(date -Iseconds)] Setting environment variables..." | tee -a /root/provision.log
   - echo 'export ANTHROPIC_API_KEY="{{ANTHROPIC_API_KEY}}"' >> /root/.bashrc
@@ -130,14 +136,14 @@ runcmd:
     EOFDEV
     fi
 
-  # Start all PM2 apps
+  # Start all PM2 apps (with HOME set to avoid /etc/.pm2)
   - echo "[$(date -Iseconds)] Starting PM2 apps..." | tee -a /root/provision.log
-  - cd /root/homestead && pm2 start ecosystem.config.js 2>&1 | tee -a /root/provision.log
+  - export HOME=/root && cd /root/homestead && pm2 start ecosystem.config.js 2>&1 | tee -a /root/provision.log
   - echo "[$(date -Iseconds)] PM2 apps started, configuring auto-start..." | tee -a /root/provision.log
-  - env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root -y 2>&1 | tee -a /root/provision.log
-  - pm2 save --force 2>&1 | tee -a /root/provision.log
+  - export HOME=/root && env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root 2>&1 | tee -a /root/provision.log
+  - export HOME=/root && pm2 save --force 2>&1 | tee -a /root/provision.log
   - echo "[$(date -Iseconds)] PM2 list:" | tee -a /root/provision.log
-  - pm2 list 2>&1 | tee -a /root/provision.log
+  - export HOME=/root && pm2 list 2>&1 | tee -a /root/provision.log
 
   # Signal completion
   - echo "[$(date -Iseconds)] Homestead provisioning complete!" | tee -a /root/provision.log

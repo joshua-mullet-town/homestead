@@ -47,6 +47,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+// Validate ../../../app/chat/[sessionId]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/chat/[sessionId]">> = Specific
+  const handler = {} as typeof import("../../../app/chat/[sessionId]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/mic-test/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/mic-test">> = Specific
@@ -87,6 +96,69 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/terminal/[sessionId]">> = Specific
   const handler = {} as typeof import("../../../app/terminal/[sessionId]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/chat/message/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/message">> = Specific
+  const handler = {} as typeof import("../../../app/api/chat/message/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/chat/start/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/start">> = Specific
+  const handler = {} as typeof import("../../../app/api/chat/start/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/chat/stream/[sessionId]/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/stream/[sessionId]">> = Specific
+  const handler = {} as typeof import("../../../app/api/chat/stream/[sessionId]/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/droplets/create/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/droplets/create">> = Specific
+  const handler = {} as typeof import("../../../app/api/droplets/create/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/droplets/destroy/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/droplets/destroy">> = Specific
+  const handler = {} as typeof import("../../../app/api/droplets/destroy/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/droplets/find-session/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/droplets/find-session">> = Specific
+  const handler = {} as typeof import("../../../app/api/droplets/find-session/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/droplets/list/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/droplets/list">> = Specific
+  const handler = {} as typeof import("../../../app/api/droplets/list/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

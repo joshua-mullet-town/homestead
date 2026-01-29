@@ -1,66 +1,251 @@
-[00:00:29.126] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:29.288] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:00:29.288] Browser LOG     [Socket] Connected
-[00:00:29.288] Browser LOG     [Terminal] Ready: test
-[00:00:50.431] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:50.602] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:00:50.602] Browser LOG     [Socket] Connected
-[00:00:50.602] Browser LOG     [Terminal] Ready: test
-[00:01:04.159] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:01:04.159] Browser LOG     [Socket] Connected
-[00:01:04.159] Browser LOG     [Terminal] Ready: test
-[00:01:10.178] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:01:10.178] Browser LOG     [Socket] Connected
-[00:01:10.178] Browser LOG     [Terminal] Ready: test
-[00:01:11.984] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:01:11.984] Browser LOG     [Socket] Connected
-[00:01:11.984] Browser LOG     [Terminal] Ready: test
-[00:01:13.249] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:01:13.249] Browser LOG     [Socket] Connected
-[00:01:13.249] Browser LOG     [Terminal] Ready: test
-[00:01:17.164] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:01:17.164] Browser LOG     [Socket] Connected
-[00:01:17.164] Browser LOG     [Terminal] Ready: test
-[00:02:02.188] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:02:02.188] Browser LOG     [Socket] Connected
-[00:02:02.188] Browser LOG     [Terminal] Ready: test
-[00:02:02.282] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:02:02.282] Browser LOG     [Socket] Connected
-[00:02:02.282] Browser LOG     [Terminal] Ready: test
-[00:02:17.558] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:17.737] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:02:17.737] Browser LOG     [Socket] Connected
-[00:02:17.737] Browser LOG     [Terminal] Ready: test
-[00:03:11.109] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:11.294] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:03:11.294] Browser LOG     [Socket] Connected
-[00:03:11.294] Browser LOG     [Terminal] Ready: test
-[00:06:31.942] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:06:32.076] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:06:32.076] Browser LOG     [Socket] Connected
-[00:06:32.076] Browser LOG     [Terminal] Ready: test
-[00:10:31.203] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:10:31.358] Browser LOG     [Socket] Connecting to: http://10.0.0.142:3005
-[00:10:31.358] Browser LOG     [Socket] Connected
-[00:10:31.358] Browser LOG     [Terminal] Ready: test
-[00:33:05.911] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:33:37.651] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:41:52.559] Browser LOG     [Socket] Disconnected
-[00:41:52.820] Browser LOG     [Socket] Connected
-[00:41:52.820] Browser LOG     [Terminal] Ready: test
-[00:41:53.286] Browser LOG     [Socket] Disconnected
-[00:41:54.284] Browser LOG     [Socket] Connected
-[00:41:54.284] Browser LOG     [Terminal] Ready: test
-[02:08:54.011] Browser LOG     [Socket] Disconnected
-[02:08:54.011] Browser LOG     [Socket] Connected
-[02:08:54.011] Browser LOG     [Terminal] Ready: test
-[02:08:54.954] Browser LOG     [Socket] Disconnected
-[02:08:55.945] Browser LOG     [Socket] Connected
-[02:08:55.945] Browser LOG     [Terminal] Ready: test
-[03:40:11.326] Browser LOG     [Socket] Disconnected
-[03:40:11.326] Browser LOG     [Socket] Connected
-[03:40:11.326] Browser LOG     [Terminal] Ready: test
-[03:40:11.883] Browser LOG     [Socket] Disconnected
-[03:40:12.877] Browser LOG     [Socket] Connected
-[03:40:12.877] Browser LOG     [Terminal] Ready: test
-[05:52:09.113] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:31.142] Browser LOG     [2026-01-29T13:50:50.243Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:00:31.668] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.829Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.830Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.836Z] [CLIENT] [INFO] Initializing terminal...
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.836Z] [CLIENT] [INFO] Importing xterm modules...
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.870Z] [CLIENT] [INFO] xterm modules imported successfully
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.870Z] [CLIENT] [INFO] Creating terminal instance...
+[00:00:32.099] Browser LOG     [2026-01-29T13:52:11.873Z] [CLIENT] [INFO] Mounting terminal to DOM...
+[00:00:32.100] Browser LOG     [2026-01-29T13:52:11.882Z] [CLIENT] [INFO] Terminal mounted successfully
+[00:00:32.100] Browser LOG     [2026-01-29T13:52:11.882Z] [CLIENT] [INFO] Socket.IO connecting to: http://161.35.135.174:3005 (droplet)
+[00:00:32.100] Browser LOG     [2026-01-29T13:52:11.883Z] [CLIENT] [INFO] Socket.IO client created
+[00:00:32.177] Browser LOG     [2026-01-29T13:51:50.236Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:00:32.434] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.694Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.695Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.705Z] [CLIENT] [INFO] Initializing terminal...
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.706Z] [CLIENT] [INFO] Importing xterm modules...
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.765Z] [CLIENT] [INFO] xterm modules imported successfully
+[00:00:33.102] Browser LOG     [2026-01-29T13:52:12.765Z] [CLIENT] [INFO] Creating terminal instance...
+[00:00:33.103] Browser LOG     [2026-01-29T13:52:12.768Z] [CLIENT] [INFO] Mounting terminal to DOM...
+[00:00:33.103] Browser LOG     [2026-01-29T13:52:12.776Z] [CLIENT] [INFO] Terminal mounted successfully
+[00:00:33.103] Browser LOG     [2026-01-29T13:52:12.777Z] [CLIENT] [INFO] Socket.IO connecting to: http://64.225.8.199:3005 (droplet)
+[00:00:33.103] Browser LOG     [2026-01-29T13:52:12.778Z] [CLIENT] [INFO] Socket.IO client created
+[00:00:53.097] Browser LOG     [2026-01-29T13:52:32.239Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:00:53.097] Browser LOG     [2026-01-29T13:52:32.242Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:00:53.097] Browser LOG     [2026-01-29T13:52:32.243Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:00:54.097] Browser LOG     [2026-01-29T13:52:33.239Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:00:54.097] Browser LOG     [2026-01-29T13:52:33.246Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:00:54.097] Browser LOG     [2026-01-29T13:52:33.248Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:01:16.095] Browser LOG     [2026-01-29T13:52:55.236Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:01:16.095] Browser LOG     [2026-01-29T13:52:55.240Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:01:16.095] Browser LOG     [2026-01-29T13:52:55.242Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769692295696, dropletIp: 64.225.8.199, previewPort: 7087
+[00:01:16.096] Browser LOG     [2026-01-29T13:52:55.238Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:01:16.096] Browser LOG     [2026-01-29T13:52:55.240Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:01:16.096] Browser LOG     [2026-01-29T13:52:55.241Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694158229, dropletIp: 161.35.135.174, previewPort: 7087
+[00:01:39.098] Browser LOG     [2026-01-29T13:53:18.237Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:01:40.096] Browser LOG     [2026-01-29T13:53:19.238Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:02:13.371] Browser LOG     [2026-01-29T13:53:50.250Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:02:37.096] Browser LOG     [2026-01-29T13:54:16.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:03:04.098] Browser LOG     [2026-01-29T13:54:43.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:03:10.104] Browser LOG     [2026-01-29T13:53:50.257Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:03:30.096] Browser LOG     [2026-01-29T13:55:09.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:03:55.200] Browser LOG     [2026-01-29T13:55:35.238Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:04:22.096] Browser LOG     [2026-01-29T13:56:01.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:04:49.099] Browser LOG     [2026-01-29T13:56:28.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:05:10.098] Browser LOG     [2026-01-29T13:55:50.255Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:05:16.097] Browser LOG     [2026-01-29T13:56:55.234Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:05:43.096] Browser LOG     [2026-01-29T13:57:22.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:06:09.096] Browser LOG     [2026-01-29T13:57:48.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:06:35.097] Browser LOG     [2026-01-29T13:58:14.234Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:07:02.096] Browser LOG     [2026-01-29T13:58:41.233Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:07:10.110] Browser LOG     [2026-01-29T13:57:50.243Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:07:29.096] Browser LOG     [2026-01-29T13:59:08.232Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:07:54.098] Browser LOG     [2026-01-29T13:59:33.236Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:08:21.098] Browser LOG     [2026-01-29T14:00:00.232Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:08:48.096] Browser LOG     [2026-01-29T14:00:27.233Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:09:10.113] Browser LOG     [2026-01-29T13:59:50.242Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:09:14.096] Browser LOG     [2026-01-29T14:00:53.235Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:11:10.112] Browser LOG     [2026-01-29T14:01:50.240Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:12:10.110] Browser LOG     [2026-01-29T14:02:50.243Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:13:10.105] Browser LOG     [2026-01-29T14:03:50.244Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:14:10.113] Browser LOG     [2026-01-29T14:04:50.231Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:15:10.113] Browser LOG     [2026-01-29T14:05:50.246Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:16:10.096] Browser LOG     [2026-01-29T14:06:50.247Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:17:10.111] Browser LOG     [2026-01-29T14:07:50.239Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:18:10.109] Browser LOG     [2026-01-29T14:08:50.248Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:19:10.113] Browser LOG     [2026-01-29T14:09:50.238Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:20:10.107] Browser LOG     [2026-01-29T14:10:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:21:10.106] Browser LOG     [2026-01-29T14:11:50.301Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:22:10.110] Browser LOG     [2026-01-29T14:12:50.297Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:23:10.104] Browser LOG     [2026-01-29T14:13:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:24:10.097] Browser LOG     [2026-01-29T14:14:50.302Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:25:10.129] Browser LOG     [2026-01-29T14:15:50.299Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:26:10.109] Browser LOG     [2026-01-29T14:16:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:27:10.108] Browser LOG     [2026-01-29T14:17:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:28:10.105] Browser LOG     [2026-01-29T14:18:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:29:10.106] Browser LOG     [2026-01-29T14:19:50.306Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:30:10.110] Browser LOG     [2026-01-29T14:20:50.294Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:31:10.102] Browser LOG     [2026-01-29T14:21:50.305Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:32:10.107] Browser LOG     [2026-01-29T14:22:50.293Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:33:10.105] Browser LOG     [2026-01-29T14:23:50.305Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:34:10.110] Browser LOG     [2026-01-29T14:24:50.302Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:35:10.107] Browser LOG     [2026-01-29T14:25:50.295Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:36:10.107] Browser LOG     [2026-01-29T14:26:50.306Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:37:10.112] Browser LOG     [2026-01-29T14:27:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:38:10.105] Browser LOG     [2026-01-29T14:28:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:39:10.107] Browser LOG     [2026-01-29T14:29:50.305Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:40:10.106] Browser LOG     [2026-01-29T14:30:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:41:10.106] Browser LOG     [2026-01-29T14:31:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:42:10.106] Browser LOG     [2026-01-29T14:32:50.302Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:43:10.107] Browser LOG     [2026-01-29T14:33:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:44:10.121] Browser LOG     [2026-01-29T14:34:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:45:10.109] Browser LOG     [2026-01-29T14:35:50.322Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:46:10.103] Browser LOG     [2026-01-29T14:36:50.279Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:47:10.105] Browser LOG     [2026-01-29T14:37:50.257Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:48:10.109] Browser LOG     [2026-01-29T14:38:50.266Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:49:10.110] Browser LOG     [2026-01-29T14:39:50.270Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:50:10.119] Browser LOG     [2026-01-29T14:40:50.269Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:51:10.102] Browser LOG     [2026-01-29T14:41:50.271Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:52:10.106] Browser LOG     [2026-01-29T14:42:50.260Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:53:10.106] Browser LOG     [2026-01-29T14:43:50.265Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:54:10.116] Browser LOG     [2026-01-29T14:44:50.256Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:55:10.105] Browser LOG     [2026-01-29T14:45:50.274Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:56:10.101] Browser LOG     [2026-01-29T14:46:50.265Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:57:10.108] Browser LOG     [2026-01-29T14:47:50.263Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:58:10.109] Browser LOG     [2026-01-29T14:48:50.264Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[00:59:10.101] Browser LOG     [2026-01-29T14:49:50.266Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:00:10.096] Browser LOG     [2026-01-29T14:50:50.261Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:01:10.096] Browser LOG     [2026-01-29T14:51:50.260Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:02:10.103] Browser LOG     [2026-01-29T14:52:50.262Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:03:10.103] Browser LOG     [2026-01-29T14:53:50.267Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:04:10.105] Browser LOG     [2026-01-29T14:54:50.264Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:05:10.107] Browser LOG     [2026-01-29T14:55:50.261Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:06:10.109] Browser LOG     [2026-01-29T14:56:50.264Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:07:10.117] Browser LOG     [2026-01-29T14:57:50.252Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:08:10.109] Browser LOG     [2026-01-29T14:58:50.265Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:09:10.105] Browser LOG     [2026-01-29T14:59:50.263Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:10:10.109] Browser LOG     [2026-01-29T15:00:50.261Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:11:10.102] Browser LOG     [2026-01-29T15:01:50.280Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:12:10.115] Browser LOG     [2026-01-29T15:02:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:13:10.104] Browser LOG     [2026-01-29T15:03:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:14:10.115] Browser LOG     [2026-01-29T15:04:50.300Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:15:10.112] Browser LOG     [2026-01-29T15:05:50.311Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:16:10.105] Browser LOG     [2026-01-29T15:06:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:17:10.106] Browser LOG     [2026-01-29T15:07:50.306Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:18:10.107] Browser LOG     [2026-01-29T15:08:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:19:10.108] Browser LOG     [2026-01-29T15:09:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:20:10.107] Browser LOG     [2026-01-29T15:10:50.305Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:21:10.108] Browser LOG     [2026-01-29T15:11:50.306Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:22:10.105] Browser LOG     [2026-01-29T15:12:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:23:10.107] Browser LOG     [2026-01-29T15:13:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:24:10.109] Browser LOG     [2026-01-29T15:14:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:25:10.103] Browser LOG     [2026-01-29T15:15:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:26:10.113] Browser LOG     [2026-01-29T15:16:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:27:10.108] Browser LOG     [2026-01-29T15:17:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:28:10.106] Browser LOG     [2026-01-29T15:18:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:29:10.102] Browser LOG     [2026-01-29T15:19:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:30:10.107] Browser LOG     [2026-01-29T15:20:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:31:10.112] Browser LOG     [2026-01-29T15:21:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:32:10.107] Browser LOG     [2026-01-29T15:22:50.317Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:33:10.107] Browser LOG     [2026-01-29T15:23:50.300Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:34:10.108] Browser LOG     [2026-01-29T15:24:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:35:10.104] Browser LOG     [2026-01-29T15:25:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:36:10.108] Browser LOG     [2026-01-29T15:26:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:37:10.110] Browser LOG     [2026-01-29T15:27:50.301Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:38:10.096] Browser LOG     [2026-01-29T15:28:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:39:10.120] Browser LOG     [2026-01-29T15:29:50.297Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:40:10.109] Browser LOG     [2026-01-29T15:30:50.313Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:41:10.101] Browser LOG     [2026-01-29T15:31:50.302Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:42:10.120] Browser LOG     [2026-01-29T15:32:50.290Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:43:10.105] Browser LOG     [2026-01-29T15:33:50.314Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:44:10.113] Browser LOG     [2026-01-29T15:34:50.301Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:45:10.118] Browser LOG     [2026-01-29T15:35:50.305Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:46:10.110] Browser LOG     [2026-01-29T15:36:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:47:10.107] Browser LOG     [2026-01-29T15:37:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:48:10.107] Browser LOG     [2026-01-29T15:38:50.291Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:49:10.096] Browser LOG     [2026-01-29T15:39:50.291Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:50:10.116] Browser LOG     [2026-01-29T15:40:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:51:10.111] Browser LOG     [2026-01-29T15:41:50.311Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:52:10.120] Browser LOG     [2026-01-29T15:42:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:53:10.103] Browser LOG     [2026-01-29T15:43:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:54:10.106] Browser LOG     [2026-01-29T15:44:50.294Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:55:10.096] Browser LOG     [2026-01-29T15:45:50.294Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:56:10.110] Browser LOG     [2026-01-29T15:46:50.293Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:57:10.106] Browser LOG     [2026-01-29T15:47:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:58:10.106] Browser LOG     [2026-01-29T15:48:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[01:59:10.096] Browser LOG     [2026-01-29T15:49:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:00:10.109] Browser LOG     [2026-01-29T15:50:50.306Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:01:10.105] Browser LOG     [2026-01-29T15:51:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:02:10.105] Browser LOG     [2026-01-29T15:52:50.303Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:03:10.104] Browser LOG     [2026-01-29T15:53:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:04:10.110] Browser LOG     [2026-01-29T15:54:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:05:10.111] Browser LOG     [2026-01-29T15:55:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:06:10.110] Browser LOG     [2026-01-29T15:56:50.317Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:07:10.107] Browser LOG     [2026-01-29T15:57:50.315Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:08:10.105] Browser LOG     [2026-01-29T15:58:50.313Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:09:10.105] Browser LOG     [2026-01-29T15:59:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:10:10.103] Browser LOG     [2026-01-29T16:00:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:11:10.106] Browser LOG     [2026-01-29T16:01:50.310Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:12:10.122] Browser LOG     [2026-01-29T16:02:50.312Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:13:10.105] Browser LOG     [2026-01-29T16:03:50.327Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:14:10.101] Browser LOG     [2026-01-29T16:04:50.311Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:15:10.107] Browser LOG     [2026-01-29T16:05:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:16:10.106] Browser LOG     [2026-01-29T16:06:50.315Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:17:10.111] Browser LOG     [2026-01-29T16:07:50.313Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:18:10.106] Browser LOG     [2026-01-29T16:08:50.317Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:19:10.103] Browser LOG     [2026-01-29T16:09:50.313Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:20:10.102] Browser LOG     [2026-01-29T16:10:50.315Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:21:10.115] Browser LOG     [2026-01-29T16:11:50.314Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:22:10.109] Browser LOG     [2026-01-29T16:12:50.309Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:23:10.112] Browser LOG     [2026-01-29T16:13:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:24:10.112] Browser LOG     [2026-01-29T16:14:50.321Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:25:10.107] Browser LOG     [2026-01-29T16:15:50.324Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:26:10.109] Browser LOG     [2026-01-29T16:16:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:27:10.111] Browser LOG     [2026-01-29T16:17:50.319Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:28:10.096] Browser LOG     [2026-01-29T16:18:50.320Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:29:10.111] Browser LOG     [2026-01-29T16:19:50.319Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:30:10.107] Browser LOG     [2026-01-29T16:20:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:31:10.109] Browser LOG     [2026-01-29T16:21:50.314Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:32:10.117] Browser LOG     [2026-01-29T16:22:50.316Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:33:10.098] Browser LOG     [2026-01-29T16:23:50.324Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:34:10.095] Browser LOG     [2026-01-29T16:24:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:35:10.111] Browser LOG     [2026-01-29T16:25:50.304Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:36:10.108] Browser LOG     [2026-01-29T16:26:50.320Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:37:10.111] Browser LOG     [2026-01-29T16:27:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:38:10.110] Browser LOG     [2026-01-29T16:28:50.322Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:39:10.103] Browser LOG     [2026-01-29T16:29:50.318Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:40:10.104] Browser LOG     [2026-01-29T16:30:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:41:10.113] Browser LOG     [2026-01-29T16:31:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:42:10.117] Browser LOG     [2026-01-29T16:32:50.320Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:43:10.107] Browser LOG     [2026-01-29T16:33:50.326Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:44:10.103] Browser LOG     [2026-01-29T16:34:50.315Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:45:10.118] Browser LOG     [2026-01-29T16:35:50.308Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:46:10.109] Browser LOG     [2026-01-29T16:36:50.329Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:47:10.114] Browser LOG     [2026-01-29T16:37:50.319Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:48:10.102] Browser LOG     [2026-01-29T16:38:50.327Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:49:10.110] Browser LOG     [2026-01-29T16:39:50.307Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:50:10.097] Browser LOG     [2026-01-29T16:40:50.322Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:51:10.098] Browser LOG     [2026-01-29T16:41:50.317Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:52:10.098] Browser LOG     [2026-01-29T16:42:50.323Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:53:10.109] Browser LOG     [2026-01-29T16:43:50.322Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:54:10.105] Browser LOG     [2026-01-29T16:44:50.301Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:55:10.115] Browser LOG     [2026-01-29T16:45:50.288Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:56:10.117] Browser LOG     [2026-01-29T16:46:50.299Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:57:10.095] Browser LOG     [2026-01-29T16:47:50.298Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:58:10.105] Browser LOG     [2026-01-29T16:48:50.291Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[02:59:10.106] Browser LOG     [2026-01-29T16:49:50.288Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[03:00:10.101] Browser LOG     [2026-01-29T16:50:50.289Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[03:01:10.112] Browser LOG     [2026-01-29T16:51:50.293Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout
+[03:01:20.671] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.859Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.860Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.877Z] [CLIENT] [INFO] Initializing terminal...
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.877Z] [CLIENT] [INFO] Importing xterm modules...
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.919Z] [CLIENT] [INFO] xterm modules imported successfully
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.919Z] [CLIENT] [INFO] Creating terminal instance...
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.921Z] [CLIENT] [INFO] Mounting terminal to DOM...
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.933Z] [CLIENT] [INFO] Terminal mounted successfully
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.933Z] [CLIENT] [INFO] Socket.IO connecting to: http://165.227.102.219:3005 (droplet)
+[03:01:20.853] Browser LOG     [2026-01-29T16:53:00.935Z] [CLIENT] [INFO] Socket.IO client created
+[03:01:21.055] Browser LOG     [2026-01-29T16:53:01.084Z] [CLIENT] [INFO] Socket.IO connected successfully
+[03:01:21.055] Browser LOG     [2026-01-29T16:53:01.084Z] [CLIENT] [INFO] Emitting terminal:create event for session: crowne-vault-1769694730750
+[03:01:21.055] Browser LOG     [2026-01-29T16:53:01.085Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:21.055] Browser LOG     [2026-01-29T16:53:01.085Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:21.055] Browser LOG     [2026-01-29T16:53:01.137Z] [CLIENT] [INFO] Terminal ready event received for session: crowne-vault-1769694730750
+[03:01:23.736] Browser LOG     [2026-01-29T16:53:03.817Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:23.736] Browser LOG     [2026-01-29T16:53:03.817Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:25.838] Browser LOG     [2026-01-29T16:53:05.918Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:01:25.838] Browser LOG     [2026-01-29T16:53:05.919Z] [CLIENT] [INFO] Terminal page loaded - sessionId: crowne-vault-1769694730750, dropletIp: 165.227.102.219, previewPort: 7087
+[03:02:10.131] Browser LOG     [2026-01-29T16:52:50.293Z] [CLIENT] [ERROR] Socket.IO connect_error: timeout

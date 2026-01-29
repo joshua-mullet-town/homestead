@@ -19,7 +19,7 @@ export default function TerminalPage() {
   const searchParams = useSearchParams();
   const sessionId = params.sessionId as string;
   const dropletIp = searchParams.get('ip');
-  const previewPort = searchParams.get('port') || '3000'; // Default to 3000, override with ?port=7087
+  const previewPort = searchParams.get('port') || '7087'; // Default to 7087 (crowne-vault), override with ?port=XXXX
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<any>(null);
   const fitAddonRef = useRef<any>(null);
