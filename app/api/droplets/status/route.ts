@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { loadSession } from '@/lib/sessions';
+import { getSession } from '@/lib/sessions';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     let ip: string;
 
     if (sessionId) {
-      session = loadSession(sessionId);
+      session = getSession(sessionId);
       if (!session) {
         return NextResponse.json(
           { error: 'Session not found' },
