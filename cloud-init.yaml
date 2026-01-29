@@ -70,6 +70,7 @@ runcmd:
       },
       "onboardingComplete": true,
       "dangerouslySkipPermissions": true,
+      "outputStyle": "Default",
       "theme": {
         "primaryColor": "orange",
         "accentColor": "yellow"

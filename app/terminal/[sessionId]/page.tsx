@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
-import { ZoomIn, ZoomOut, MessageSquare, Home } from 'lucide-react';
+import { ZoomIn, ZoomOut, MessageSquare, Home, RefreshCw } from 'lucide-react';
 
 // Client-side logging helper
 function logClient(message: string, level = 'INFO') {
@@ -28,6 +28,7 @@ export default function TerminalPage() {
   const [error, setError] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState(14);
   const [showPreview, setShowPreview] = useState(false);
+  const [isRestarting, setIsRestarting] = useState(false);
 
   logClient(`Terminal page loaded - sessionId: ${sessionId}, dropletIp: ${dropletIp}, previewPort: ${previewPort}`);
 
@@ -227,6 +228,27 @@ export default function TerminalPage() {
     }
   }, [sessionId]);
 
+  // Handle restart dev server
+  const handleRestartDevServer = useCallback(async () => {
+    if (!socketRef.current || !isConnected) {
+      logClient('Cannot restart - socket not connected', 'WARN');
+      return;
+    }
+
+    setIsRestarting(true);
+    logClient('Restarting dev server...');
+
+    // Send PM2 restart command through terminal
+    const command = 'export HOME=/root && pm2 restart dev-server\n';
+    socketRef.current.emit('terminal:input', sessionId, command);
+
+    // Reset restarting state after 2 seconds
+    setTimeout(() => {
+      setIsRestarting(false);
+      logClient('Dev server restart command sent');
+    }, 2000);
+  }, [sessionId, isConnected]);
+
   return (
     <div className="fixed inset-0 w-screen h-screen bg-black flex flex-col overflow-hidden">
       {/* Status Bar */}
@@ -261,6 +283,21 @@ export default function TerminalPage() {
           >
             <MessageSquare size={14} />
             CHAT
+          </button>
+
+          {/* Restart Dev Server button */}
+          <button
+            onClick={handleRestartDevServer}
+            disabled={!isConnected || isRestarting}
+            className={`px-3 py-1.5 font-bold rounded transition-colors text-sm flex items-center gap-1 ${
+              isRestarting
+                ? 'bg-gray-600 text-gray-400 cursor-wait'
+                : 'bg-[#FF6600] text-white hover:bg-[#FF3333]'
+            }`}
+            title="Restart Next.js dev server"
+          >
+            <RefreshCw size={14} className={isRestarting ? 'animate-spin' : ''} />
+            {isRestarting ? 'RESTARTING...' : 'RESTART'}
           </button>
 
           {/* Toggle button */}

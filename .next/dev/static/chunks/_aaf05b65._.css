@@ -563,6 +563,10 @@ button {
   animation: 1s linear infinite spin;
 }
 
+.cursor-wait {
+  cursor: wait;
+}
+
 .resize-none {
   resize: none;
 }
@@ -835,6 +839,11 @@ button {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1));
 }
 
 .p-0 {

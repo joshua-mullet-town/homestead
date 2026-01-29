@@ -128,6 +128,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zoom$2d$out$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ZoomOut$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zoom-out.js [app-ssr] (ecmascript) <export default as ZoomOut>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/message-square.js [app-ssr] (ecmascript) <export default as MessageSquare>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/house.js [app-ssr] (ecmascript) <export default as Home>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/refresh-cw.js [app-ssr] (ecmascript) <export default as RefreshCw>");
 'use client';
 ;
 ;
@@ -156,6 +157,7 @@ function TerminalPage() {
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [fontSize, setFontSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(14);
     const [showPreview, setShowPreview] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isRestarting, setIsRestarting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     logClient(`Terminal page loaded - sessionId: ${sessionId}, dropletIp: ${dropletIp}, previewPort: ${previewPort}`);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         let xterm;
@@ -332,6 +334,26 @@ function TerminalPage() {
     }, [
         sessionId
     ]);
+    // Handle restart dev server
+    const handleRestartDevServer = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+        if (!socketRef.current || !isConnected) {
+            logClient('Cannot restart - socket not connected', 'WARN');
+            return;
+        }
+        setIsRestarting(true);
+        logClient('Restarting dev server...');
+        // Send PM2 restart command through terminal
+        const command = 'export HOME=/root && pm2 restart dev-server\n';
+        socketRef.current.emit('terminal:input', sessionId, command);
+        // Reset restarting state after 2 seconds
+        setTimeout(()=>{
+            setIsRestarting(false);
+            logClient('Dev server restart command sent');
+        }, 2000);
+    }, [
+        sessionId,
+        isConnected
+    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "fixed inset-0 w-screen h-screen bg-black flex flex-col overflow-hidden",
         children: [
@@ -352,7 +374,7 @@ function TerminalPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 235,
+                                lineNumber: 257,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -362,7 +384,7 @@ function TerminalPage() {
                                         className: `w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 261,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -370,19 +392,19 @@ function TerminalPage() {
                                         children: isConnected ? 'Connected' : 'Disconnected'
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 240,
+                                        lineNumber: 262,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 238,
+                                lineNumber: 260,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 234,
+                        lineNumber: 256,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -397,14 +419,14 @@ function TerminalPage() {
                                         size: 14
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 252,
+                                        lineNumber: 274,
                                         columnNumber: 13
                                     }, this),
                                     "HOME"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 247,
+                                lineNumber: 269,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -416,14 +438,35 @@ function TerminalPage() {
                                         size: 14
                                     }, void 0, false, {
                                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                        lineNumber: 262,
+                                        lineNumber: 284,
                                         columnNumber: 13
                                     }, this),
                                     "CHAT"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 257,
+                                lineNumber: 279,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleRestartDevServer,
+                                disabled: !isConnected || isRestarting,
+                                className: `px-3 py-1.5 font-bold rounded transition-colors text-sm flex items-center gap-1 ${isRestarting ? 'bg-gray-600 text-gray-400 cursor-wait' : 'bg-[#FF6600] text-white hover:bg-[#FF3333]'}`,
+                                title: "Restart Next.js dev server",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                                        size: 14,
+                                        className: isRestarting ? 'animate-spin' : ''
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                        lineNumber: 299,
+                                        columnNumber: 13
+                                    }, this),
+                                    isRestarting ? 'RESTARTING...' : 'RESTART'
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/terminal/[sessionId]/page.tsx",
+                                lineNumber: 289,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -432,7 +475,7 @@ function TerminalPage() {
                                 children: showPreview ? 'TERMINAL' : 'PREVIEW'
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 267,
+                                lineNumber: 304,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -443,12 +486,12 @@ function TerminalPage() {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                    lineNumber: 280,
+                                    lineNumber: 317,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 275,
+                                lineNumber: 312,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -456,7 +499,7 @@ function TerminalPage() {
                                 children: fontSize
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 282,
+                                lineNumber: 319,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -467,12 +510,12 @@ function TerminalPage() {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                    lineNumber: 288,
+                                    lineNumber: 325,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 283,
+                                lineNumber: 320,
                                 columnNumber: 11
                             }, this),
                             error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -483,19 +526,19 @@ function TerminalPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 291,
+                                lineNumber: 328,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 245,
+                        lineNumber: 267,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 233,
+                lineNumber: 255,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -507,7 +550,7 @@ function TerminalPage() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 297,
+                lineNumber: 334,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -521,7 +564,7 @@ function TerminalPage() {
                     title: "App Preview"
                 }, void 0, false, {
                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                    lineNumber: 309,
+                    lineNumber: 346,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "absolute inset-0 flex items-center justify-center",
@@ -533,14 +576,14 @@ function TerminalPage() {
                                 children: "No Preview Available"
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 317,
+                                lineNumber: 354,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 children: "No droplet IP provided"
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 318,
+                                lineNumber: 355,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -548,29 +591,29 @@ function TerminalPage() {
                                 children: "Add ?port=XXXX to URL to specify port (default: 3000)"
                             }, void 0, false, {
                                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                                lineNumber: 319,
+                                lineNumber: 356,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                        lineNumber: 316,
+                        lineNumber: 353,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                    lineNumber: 315,
+                    lineNumber: 352,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-                lineNumber: 307,
+                lineNumber: 344,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/terminal/[sessionId]/page.tsx",
-        lineNumber: 231,
+        lineNumber: 253,
         columnNumber: 5
     }, this);
 }

@@ -1,4 +1,7 @@
 {
   "/api/droplets/create/route": "app/api/droplets/create/route.js",
+  "/api/droplets/destroy/route": "app/api/droplets/destroy/route.js",
+  "/api/droplets/list/route": "app/api/droplets/list/route.js",
+  "/page": "app/page.js",
   "/terminal/[sessionId]/page": "app/terminal/[sessionId]/page.js"
 }
