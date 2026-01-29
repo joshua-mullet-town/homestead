@@ -1,5 +1,46 @@
 # STATE.md - What We Know
 
+## [2026-01-29 17:30] 🎉 END-TO-END AUTOMATION WORKING!
+
+**COMPLETE SUCCESS:** Claude Code auto-starts on droplet and is ready to use!
+
+**What We Proved:**
+1. ✅ Droplet provisions successfully (no cloud-init errors)
+2. ✅ Terminal connects (no timeout issues)
+3. ✅ Claude Code auto-starts with `IS_SANDBOX=1` flag
+4. ✅ Dev server runs on port 7087
+5. ✅ All environment variables injected correctly
+6. ✅ Firebase, SendGrid, UPS credentials all working
+
+**Key Fix:** Added `IS_SANDBOX=1` environment variable to Claude Code command
+- Allows `--dangerously-skip-permissions` to work as root user
+- Signals we're in an isolated/ephemeral environment
+- Droplets are temporary and destroyed after use, so root access is acceptable
+
+**Updated Auto-Start Command:**
+```bash
+IS_SANDBOX=1 claude --dangerously-skip-permissions
+```
+
+**Complete Automation Flow:**
+1. User clicks issue in Homestead UI
+2. API creates DigitalOcean droplet (~40 seconds)
+3. Cloud-init provisions environment (~2-3 minutes):
+   - Installs Node.js, PM2, Claude Code
+   - Clones user's repo and creates branch
+   - Injects all environment variables and secrets
+   - Starts homestead terminal server (PM2)
+   - Starts Next.js dev server (PM2)
+4. Terminal auto-connects and runs Claude Code
+5. User can immediately start coding via terminal + preview
+
+**Current Issues to Fix:**
+1. Claude Code asks for text style preference on first run (annoying)
+2. Terminal shows "disconnected" for ~30 seconds on initial load (bad UX)
+3. Dev server sometimes crashes - need restart button
+
+---
+
 ## [2026-01-29 14:00] AUTOMATED SECRET INJECTION COMPLETE
 
 **FULLY AUTOMATED FIREBASE + ENV VAR SETUP**
