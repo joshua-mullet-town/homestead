@@ -450,6 +450,10 @@ button {
   max-height: 80vh;
 }
 
+.max-h-64 {
+  max-height: 16rem;
+}
+
 .min-h-\[200px\] {
   min-height: 200px;
 }
@@ -680,6 +684,10 @@ button {
 
 .whitespace-pre-wrap {
   white-space: pre-wrap;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .rounded {

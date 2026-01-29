@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadSession } from '@/lib/sessions';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 interface DropletStatusRequest {
   sessionId?: string;
@@ -18,6 +22,7 @@ interface ProvisioningStatus {
     status: 'pending' | 'in_progress' | 'complete' | 'error';
     message?: string;
   }[];
+  logLines?: string[]; // Last 10 lines from provision.log
 }
 
 const DO_API_TOKEN = process.env.DO_API_TOKEN;
@@ -57,6 +62,20 @@ async function checkPort(ip: string, port: number): Promise<boolean> {
     return true; // Port is responding (even if it returns error status)
   } catch (err) {
     return false; // Port not responding or timeout
+  }
+}
+
+async function readProvisionLog(ip: string): Promise<string[]> {
+  try {
+    // SSH config will automatically use the right key
+    const { stdout } = await execAsync(
+      `ssh -o ConnectTimeout=3 root@${ip} "tail -15 /root/provision.log 2>/dev/null || echo 'Log not available yet'"`,
+      { timeout: 5000 }
+    );
+
+    return stdout.trim().split('\n').filter(line => line.length > 0);
+  } catch (err) {
+    return ['Log not available yet'];
   }
 }
 
@@ -114,6 +133,9 @@ export async function POST(request: NextRequest) {
     const port3005Ready = ip ? await checkPort(ip, 3005) : false;
     const port7087Ready = ip ? await checkPort(ip, 7087) : false;
 
+    // Read provision log if droplet is active
+    const logLines = (dropletStatus === 'active' && ip) ? await readProvisionLog(ip) : [];
+
     // Determine cloud-init status based on ports
     const cloudInitComplete = port3005Ready && port7087Ready;
 
@@ -159,6 +181,7 @@ export async function POST(request: NextRequest) {
           ? 'Creating droplet...'
           : 'Provisioning environment...',
       steps,
+      logLines,
     };
 
     return NextResponse.json(status);

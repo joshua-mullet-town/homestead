@@ -17,6 +17,7 @@ interface ProvisioningStatusData {
   ready: boolean;
   message: string;
   steps: ProvisioningStep[];
+  logLines?: string[];
 }
 
 interface ProvisioningStatusProps {
@@ -155,6 +156,22 @@ export default function ProvisioningStatus({ sessionId, onReady }: ProvisioningS
             </div>
           ))}
         </div>
+
+        {/* Live Provision Log */}
+        {status?.logLines && status.logLines.length > 0 && status.logLines[0] !== 'Log not available yet' && (
+          <div className="mt-6">
+            <h3 className="text-white text-xl font-bold mb-3 flex items-center gap-2">
+              <span>📋</span> Live Provision Log
+            </h3>
+            <div className="bg-black border-2 border-[#00FF66] p-4 rounded font-mono text-xs max-h-64 overflow-y-auto">
+              {status.logLines.map((line, i) => (
+                <div key={i} className="text-[#00FF66] mb-1 whitespace-pre-wrap break-all">
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Estimated Time */}
         <div className="mt-8 text-center">

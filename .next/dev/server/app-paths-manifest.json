@@ -1,7 +1,12 @@
 {
+  "/api/chat/message/route": "app/api/chat/message/route.js",
+  "/api/chat/start/route": "app/api/chat/start/route.js",
+  "/api/chat/stream/[sessionId]/route": "app/api/chat/stream/[sessionId]/route.js",
   "/api/droplets/create/route": "app/api/droplets/create/route.js",
   "/api/droplets/destroy/route": "app/api/droplets/destroy/route.js",
+  "/api/droplets/find-session/route": "app/api/droplets/find-session/route.js",
   "/api/droplets/list/route": "app/api/droplets/list/route.js",
+  "/chat/[sessionId]/page": "app/chat/[sessionId]/page.js",
   "/page": "app/page.js",
   "/terminal/[sessionId]/page": "app/terminal/[sessionId]/page.js"
 }
