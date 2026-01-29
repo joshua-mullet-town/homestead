@@ -13,9 +13,9 @@ All project secrets are stored in `/Users/joshuamullet/code/homestead/.env.secre
 **Format:**
 ```bash
 # REPO_NAME__ENV_VAR_NAME=value
-CROWNE_VAULT__SENDGRID_API_KEY=sk_...
-CROWNE_VAULT__NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
-CROWNE_VAULT__SERVICE_ACCOUNT_JSON_BASE64=ewogICJ0e...
+CROWNE_VAULT__SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CROWNE_VAULT__NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+CROWNE_VAULT__SERVICE_ACCOUNT_JSON_BASE64=ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCi...
 ```
 
 **Naming Convention:**
@@ -40,18 +40,18 @@ The cloud-init script creates these files in `/root/project/`:
 
 **`.env.local`** (private variables):
 ```bash
-SENDGRID_API_KEY=SG.ppE-iLw0S3WLkON2TezbrQ...
-UPS_CLIENT_ID=XHnlldoOwv1GZO0QieaSQldTmgAxv0m...
-UPS_CLIENT_SECRET=0NmUrBkSN6AA6NjSs4KoGTG...
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+UPS_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+UPS_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 GOOGLE_APPLICATION_CREDENTIALS=./service-account-dev.json
 ```
 
 **`.env.development`** (public variables):
 ```bash
 # Firebase - Development
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAa9D7bMXfvlWzheJu0_eP2JMzc7mwPL8M
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=crowne-vault-dev.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=crowne-vault-dev
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project
 # ... etc
 ```
 
@@ -59,10 +59,10 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=crowne-vault-dev
 ```json
 {
   "type": "service_account",
-  "project_id": "crowne-vault-dev",
-  "private_key_id": "bce150841...",
+  "project_id": "your-project-id",
+  "private_key_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   "private_key": "-----BEGIN PRIVATE KEY-----\n...",
-  "client_email": "firebase-adminsdk-fbsvc@crowne-vault-dev.iam.gserviceaccount.com"
+  "client_email": "firebase-adminsdk@your-project.iam.gserviceaccount.com"
 }
 ```
 
